@@ -26,7 +26,7 @@ public class HolidayService {
     @Value("${service.key}") // application.properties 파일에 저장된 API 키를 주입받습니다.
     private String serviceKey;
 
-    private static final String API_URL = "http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo";
+    private static final String API_URL = "https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo";
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
@@ -67,7 +67,7 @@ public class HolidayService {
                 holidays.add(objectMapper.convertValue(itemNode, HolidayDTO.class));
             }
 
-            log.info(finalYear + "/" + finalMonth + " 조회 결과 : " + holidays);
+//            log.info(">>>>>>>>>>>"+finalYear + "/" + finalMonth + " 조회 결과 : " + holidays);
             
             // isHoliday가 "Y"인 경우만 필터링하여 반환
             return holidays.stream()

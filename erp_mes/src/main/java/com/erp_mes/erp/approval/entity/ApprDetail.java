@@ -29,8 +29,12 @@ public class ApprDetail {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "approval_detail_seq_generator")
-    @SequenceGenerator(name="approval_detail_seq_generator", sequenceName="approval_detail_seq", allocationSize=1)
-    @Column(name = "det_id", updatable = false)
+	@SequenceGenerator(
+	    name = "approval_detail_seq_generator",
+	    sequenceName = "approval_detail_seq",
+	    allocationSize = 1  // DB 시퀀스 increment와 맞춤
+	)
+	@Column(name = "det_id", updatable = false)
 	private Long id;
 	
 	@Temporal(TemporalType.DATE)

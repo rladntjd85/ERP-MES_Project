@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.erp_mes.erp.approval.constant.ApprDecision;
 import com.erp_mes.erp.approval.constant.ApprReqType;
@@ -61,6 +62,14 @@ public class ApprController {
 
     @GetMapping("/new/{docId}")
     public String draftingForm(@PathVariable("docId") Long docId, Model model, Authentication authentication){
+    	    	
+    	// apprDTO가 이미 있으면 (리다이렉트로 전달된 경우) 그대로 사용
+        // 없으면 (최초 진입 시) 새 객체 생성
+        ApprDTO apprDTO = (ApprDTO) model.getAttribute("apprDTO");
+        if (apprDTO == null) {
+            apprDTO = new ApprDTO();
+            model.addAttribute("apprDTO", apprDTO);
+        }
     	
     	//사원정보
     	PersonnelLoginDTO principal = (PersonnelLoginDTO) authentication.getPrincipal();
@@ -76,7 +85,6 @@ public class ApprController {
     	
     	log.info(">>>>>>>>>>>>>>>>>>>>>"+ docContent);
     	    	
-    	model.addAttribute("apprDTO", new ApprDTO());
     	model.addAttribute("selectedRole", documentDTO.getReqType()); // 기본 선택값
     	model.addAttribute("loginEmpId", loginEmpId);
     	model.addAttribute("principal", principal);
@@ -84,6 +92,7 @@ public class ApprController {
     	model.addAttribute("docTitle", docTitle);
     	model.addAttribute("docContent", docContent);
     	model.addAttribute("reqTypes", ApprReqType.values());
+    	model.addAttribute("docId", docId);
     	        
         return "approval/drafting_form";
     }
@@ -278,18 +287,24 @@ public class ApprController {
 	    return apprService.getApprEmployee(name, loginEmpId);
 	}
  	
-    // 기존 하드코딩된 "2025082501" 대신 실제 로그인 사용자 정보 사용
     @PostMapping("/save")
     @ResponseBody
-    public String registAppr(@ModelAttribute("apprDTO") @Valid ApprDTO apprDTO, 
-                            @RequestParam("empIds") String[] empIds, 
-                            BindingResult bindingResult, 
-                            Model model,
-                            Authentication authentication) throws IOException {  // Authentication 추가
+    public String registAppr(@ModelAttribute("apprDTO") @Valid ApprDTO apprDTO, BindingResult bindingResult,  @RequestParam(value = "empIds", required = false) String[] empIds, @RequestParam("docId") Long docId, Model model,
+    		RedirectAttributes redirectAttributes,Authentication authentication) throws IOException {  // Authentication 추가
+    	
+    	log.info("empIds.length===>>>>>>"+empIds.length);
+    	// empIds 필수검증
+    	if (empIds == null || empIds.length < 2) {
+            bindingResult.reject("empIds.empty", "결재자를 한 명 이상 지정해야 합니다.");
+        }
 
         if (bindingResult.hasErrors()) {
-            String reqType = apprDTO.getReqType();
-            return "approval/new/" + reqType;
+        	// Flash 속성을 사용하여 오류 데이터와 입력 데이터를 임시 저장
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.apprDTO", bindingResult);
+            redirectAttributes.addFlashAttribute("apprDTO", apprDTO);
+            
+            // GET /approval/new/{docId} 컨트롤러로 리다이렉트
+            return "redirect:/approval/new/" + docId; 
         }
 
         if (apprDTO.getApprDetailDTOList() == null) {
@@ -302,8 +317,11 @@ public class ApprController {
 
         //결재 리스트로 이동되게 변경해야함.
         return "<script>" +
-                "alert('신청 완료되었습니다.');" +
-                "window.close();" +
-                "</script>";
+		        "alert('신청 완료되었습니다.');" +
+		        "if (window.opener) {" +
+		        "   window.opener.location.href = '/approval/approval_list?status=my';" +
+		        "}" +
+		        "window.close();" +
+		        "</script>";
     }
 }

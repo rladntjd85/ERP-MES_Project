@@ -37,6 +37,7 @@ public class FileUtils {
 		// --------------------------------------------------------------------
 		// 참고) 만약, 외부로부터 다운로드 경로 중의 일부라도 전송받을 경우 경로에 대한 조작(Directory Traversal) 등이 일어날 수 있음
 		// ex) ItemImgDTO 내의 imgName 등이 외부로부터 전달받은 경로 또는 파일명이라고 가정
+		log.info(perImg.getImgName()+">>>>>>>>>>>>>>>>>>@@@@@@@@@@@@@@@@@@@@@@");
 		Path targetPath = basePath.resolve(perImg.getImgName())
 									.normalize();
 		
@@ -49,6 +50,11 @@ public class FileUtils {
 		try {
 			// 이미지 대한 UrlResource 객체 생성
 			Resource resource = new UrlResource(targetPath.toUri());	
+			
+			
+			log.info("targetPath={}", targetPath);
+			log.info("exists={}, readable={}", Files.exists(targetPath), Files.isReadable(targetPath));
+
 			
 			// 이미지 경로 및 파일 존재여부 판별하고, 파일 접근 가능 여부도 체크
 			if(Files.notExists(targetPath) || !Files.isReadable(targetPath)) {

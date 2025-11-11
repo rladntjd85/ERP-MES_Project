@@ -85,7 +85,7 @@ public class PersonnelController {
 			empLevelId = personnelLoginDTO.getEmpLevelId();
 			// 부서 ID로 부서명을 조회하는 로직
 			// 이전에 CommonCodeService에 추가한 메서드를 활용해야 합니다.
-			log.info("로그인한 사용자의 부서 ID: " + empDeptId);
+//			log.info("로그인한 사용자의 부서 ID: " + empDeptId);
 			if (commonCodeService != null) {
 				CommonDetailCode deptCode = commonCodeService.getCommonDetailCode(empDeptId);
 				if (deptCode != null) {
@@ -106,7 +106,7 @@ public class PersonnelController {
 			
 		}
 		
-		log.info("로그인 한 사람 정보 : " + loginEmp.toString());
+//		log.info("로그인 한 사람 정보 : " + loginEmp.toString());
 		
 		
 		if("DEP001".equals(loginEmp.getDeptId()) || "AUT001".equals(loginEmp.getLevId())) {
@@ -122,7 +122,7 @@ public class PersonnelController {
 	//이미지 요청 리퀘스트 제어 
 	@GetMapping("/showImg/{empId}")
 	public ResponseEntity<Resource> getImg(@PathVariable("empId") String empId) {
-		log.info("사원 번호 : " + empId);
+//		log.info("사원 번호 : " + empId);
 	
 		
 		
@@ -131,9 +131,6 @@ public class PersonnelController {
 	
 	@GetMapping("/loginShowImg/{empId}")
 	public ResponseEntity<Resource> getImg2(@PathVariable("empId") String empId) {
-		log.info("사원 번호 : " + empId);
-		
-		
 			
 //			return img;
 //			 try catch 문으로 변경
@@ -175,24 +172,24 @@ public class PersonnelController {
         // 부서 및 직책 리스트도 모델에 추가 (select 박스 생성을 위해 필요)
         List<CommonDetailCodeDTO> departments = personnelService.getAllDepartments();
         model.addAttribute("departments", departments);
-        log.info("personnel : " + personnelOpt);
-        log.info("부서 정보 : " + departments.toString());
+//        log.info("personnel : " + personnelOpt);
+//        log.info("부서 정보 : " + departments.toString());
 
         List<CommonDetailCodeDTO> position = personnelService.getAllPositions();
         model.addAttribute("position", position);
-        log.info("직책 정보 : " + position.toString());
+//        log.info("직책 정보 : " + position.toString());
     	//추가 된 부분 ----------------------------------------------------
     	//재직 리스트
 		List<CommonDetailCodeDTO> status = personnelService.getAllStatus();
 		model.addAttribute("status", status);
-        log.info("상태 정보 : " + status.toString());
+//        log.info("상태 정보 : " + status.toString());
 
 		//보안등급
 		List<CommonDetailCodeDTO> level = personnelService.getAllLevel();
 		model.addAttribute("level", level);
-        log.info("보안등급 정보 : " + level.toString());
+//        log.info("보안등급 정보 : " + level.toString());
         
-        log.info("사원등급 정보 : " + departments.toString());
+//        log.info("사원등급 정보 : " + departments.toString());
         
         
         // 현재 로그인 한 로그인 정보 저장해서 사용
@@ -215,7 +212,7 @@ public class PersonnelController {
 			empLevelId = personnelLoginDTO.getEmpLevelId();
 			// 부서 ID로 부서명을 조회하는 로직
 			// 이전에 CommonCodeService에 추가한 메서드를 활용해야 합니다.
-			log.info("로그인한 사용자의 부서 ID: " + empDeptId);
+//			log.info("로그인한 사용자의 부서 ID: " + empDeptId);
 			if (commonCodeService != null) {
 				CommonDetailCode deptCode = commonCodeService.getCommonDetailCode(empDeptId);
 				if (deptCode != null) {
@@ -240,14 +237,14 @@ public class PersonnelController {
 		**/
 		
 		// 인사팀 계정이거나  관리자 계정일경우 와 다른 부서 또는 관리자 이하 계정일경우 분리해서 접속 
-		log.info("empLevelId='{}', empDeptId='{}'", empLevelId, empDeptId);
+//		log.info("empLevelId='{}', empDeptId='{}'", empLevelId, empDeptId);
 		if("AUT001".equals(empLevelId) || "DEP001".equals(empDeptId) ) {
-			log.info("인사 팀 또는 관리자 계정으로 진입");
+//			log.info("인사 팀 또는 관리자 계정으로 진입");
 			
 			
 			return "/hrn/personnelDetailInfo";
 		}else {
-			log.info("인사팀 외 계정 또는 일반 계정");
+//			log.info("인사팀 외 계정 또는 일반 계정");
 
 			
 			return "/hrn/personnelDetailInfo2";
@@ -263,7 +260,7 @@ public class PersonnelController {
     @PostMapping("/updatePro")
     public String updatePro(PersonnelDTO personnelDTO, RedirectAttributes redirectAttributes,
     		 @RequestParam("empImg") MultipartFile empImg) {
-        log.info("수정할 사원 정보 : " + personnelDTO.toString());
+//        log.info("수정할 사원 정보 : " + personnelDTO.toString());
         
         try {
             personnelService.updatePersonnel(personnelDTO, empImg);		//프로필 사진 저장 기능 추가
@@ -277,7 +274,7 @@ public class PersonnelController {
 	
 	@GetMapping("/regist")
 	public String regist(Model model) {
-		log.info("PersonnelController regist()");
+//		log.info("PersonnelController regist()");
 		
 		// 부서 리스트
 		List<CommonDetailCodeDTO> departments = personnelService.getAllDepartments();
@@ -299,8 +296,8 @@ public class PersonnelController {
 		model.addAttribute("level", level);
 		//추가 된 부분 ----------------------------------------------------
 		
-		log.info("position" + position.toString());
-		log.info("departments" + departments.toString());
+//		log.info("position" + position.toString());
+//		log.info("departments" + departments.toString());
 		
 
 		//추가 된 부분 : 사유 로그인 한 사람이 인사팀이거나 관리자 일경우에만 접속 허용
@@ -325,7 +322,7 @@ public class PersonnelController {
 			empLevelId = personnelLoginDTO.getEmpLevelId();
 			// 부서 ID로 부서명을 조회하는 로직
 			// 이전에 CommonCodeService에 추가한 메서드를 활용해야 합니다.
-			log.info("로그인한 사용자의 부서 ID: " + empDeptId);
+//			log.info("로그인한 사용자의 부서 ID: " + empDeptId);
 			if (commonCodeService != null) {
 				CommonDetailCode deptCode = commonCodeService.getCommonDetailCode(empDeptId);
 				if (deptCode != null) {
@@ -335,7 +332,7 @@ public class PersonnelController {
 		}
 		
 		if("DEP001".equals(personnelLoginDTO.getEmpDeptId()) || "AUT001".equals(personnelLoginDTO.getEmpLevelId())) {
-			log.info("인사팀 혹은 관리자 계정입니다. 접속 허용합니다.");
+//			log.info("인사팀 혹은 관리자 계정입니다. 접속 허용합니다.");
 			
 			return "/hrn/personnelRegist";
 		}else {
@@ -346,7 +343,7 @@ public class PersonnelController {
 	
 	@PostMapping("/registPro")
 	public String registPro(PersonnelDTO personnelDTO, @RequestParam("empImg") MultipartFile empImg) throws IOException {
-		log.info("등록할 사원 정보 : " + personnelDTO.toString());
+//		log.info("등록할 사원 정보 : " + personnelDTO.toString());
 		
 		personnelService.personRegist(personnelDTO, empImg);
 
@@ -356,7 +353,7 @@ public class PersonnelController {
 	// 인사발령
 	@GetMapping("/trans")
 	public String trans(Model model, @AuthenticationPrincipal PersonnelLoginDTO userDetails) {
-		log.info("PersonnelController trans()");
+//		log.info("PersonnelController trans()");
 		
 		// 로그인한 사용자의 부서 정보 확인
 		String userDeptId = userDetails.getEmpDeptId(); 
@@ -377,14 +374,14 @@ public class PersonnelController {
 	@GetMapping("/api/transfers")
 	@ResponseBody
 	public List<PersonnelTransferDTO> getTransferList() {
-	    log.info("GET /api/transfers 호출");
+//	    log.info("GET /api/transfers 호출");
 	    return personnelTransferService.getTransferPersonnels();
 	}
 	
 	// 발령 등록 폼
 	@GetMapping("/trans/save")
     public String transSave(Model model) {
-        log.info("PersonnelController transSave()");
+//        log.info("PersonnelController transSave()");
         
         // 팝업 페이지에 필요한 부서, 직급 리스트 추가
         List<CommonDetailCodeDTO> departments = personnelService.getAllDepartments();
@@ -407,7 +404,7 @@ public class PersonnelController {
 	// 전자결재로 넘김
 	@PostMapping("/trans/submit")
     public ResponseEntity<String> transPersonnel(@RequestBody Map<String, Object> payload, Principal principal) {
-        log.info("인사 발령 요청 수신: {}", payload);
+//        log.info("인사 발령 요청 수신: {}", payload);
         String loginEmpId = principal.getName(); // 로그인한 사용자 ID
         try {
             // Service 계층으로 발령 데이터 전달

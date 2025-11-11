@@ -61,7 +61,7 @@ a[aria-expanded="true"]>.caret::before {
                                         th:aria-controls="'lotA_' + *{workOrderId}"
                                         th:data-value="*{workOrderId}"
                                       > <span
-										class="mr-2 caret"></span> <span th:text="|*{lotId} *{productName} (*{worOrderStatus})|"></span>
+										class="mr-2 caret"></span><span th:text="|*{lotId} *{productName} (*{worOrderStatus})|"></span>
 								</a>
 									<ul class="collapse pl-4 mt-2" th:id="'lotA_' + *{workOrderId}" th:data-parent="'#lotTree_' + ${stat.index}">
 										<!-- 공정 토글 -->
@@ -283,10 +283,6 @@ a[aria-expanded="true"]>.caret::before {
                   });
                 });
             });
-            
-            
-            
-            
 	</script>
 	</th:block>
 </body>

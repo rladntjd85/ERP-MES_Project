@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,9 @@ public class ApprDTO {
 	private Long reqId;
 	
 	private String empId;
+	
+	@NotEmpty(message = "결재자를 한 명 이상 선택해야 합니다.")
+    private List<String> empIds;
 	
 	private String reqType;
 	

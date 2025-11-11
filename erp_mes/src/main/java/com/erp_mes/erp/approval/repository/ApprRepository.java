@@ -179,12 +179,12 @@ public interface ApprRepository extends JpaRepository<Appr,Long> {
     //사원 정보 가져오기
     @Query(value = "" +
     	    "SELECT * FROM " +
-    	    "C##TEAM1.employee e " +
+    	    "employee e " +
     	    "JOIN " +
-    	    "C##TEAM1.common_dt_code d ON e.emp_dept_id = d.com_dt_id " +
+    	    "common_dt_code d ON e.emp_dept_id = d.com_dt_id " +
     	    "JOIN " +
-    	    "C##TEAM1.common_dt_code p ON e.emp_position = p.com_dt_id " +
-    	    "WHERE e.emp_name LIKE %:keyword% and e.emp_id <> :currentEmpId",  // 파라미터로 변경
+    	    "common_dt_code p ON e.emp_position = p.com_dt_id " +
+    	    "WHERE e.emp_name LIKE '%' || :keyword || '%' and e.emp_id <> :currentEmpId",  // 파라미터로 변경
     	    nativeQuery = true)
 	List<Personnel> findByNameContainingIgnoreCase(@Param("keyword") String keyword, 
 	                                               @Param("currentEmpId") String currentEmpId);
