@@ -63,11 +63,14 @@
 				<!-- Nav Item - Utilities Collapse Menu -->
 				ERP
 			</div>
-			<li class="nav-item"><a class="nav-link collapsed" href="#"
-				data-toggle="collapse" data-target="#collapseUtilities"
-				aria-expanded="true" aria-controls="collapseUtilities">
-				<i class="fas fa-fw fa-wrench"></i> <span>인사관리</span>
-			</a>
+            <!-- 인사관리 -->
+            <li class="nav-item">
+              <a class="nav-link collapsed" href="#"
+                 data-toggle="collapse" data-target="#collapseUtilities"
+                 aria-expanded="false" aria-controls="collapseUtilities"
+                 data-menu-key="personnel">
+                <i class="fas fa-fw fa-wrench"></i> <span>인사관리</span>
+              </a>
 				<div id="collapseUtilities" class="collapse"
 					aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
 					<div class="bg-white py-2 collapse-inner rounded">
@@ -85,7 +88,8 @@
 			<!-- Nav Item - Pages Collapse Menu -->
 			<li class="nav-item"><a class="nav-link collapsed" href="#"
 				data-toggle="collapse" data-target="#collapsePages"
-				aria-expanded="true" aria-controls="collapsePages"> <i
+				aria-expanded="true" aria-controls="collapsePages"
+                data-menu-key="attendance"> <i
 					class="fas fa-fw fa-folder"></i> <span>근태관리</span>
 			</a>
 				<div id="collapsePages" class="collapse"
@@ -109,7 +113,8 @@
 			<!-- 메뉴 추가-->
 			<li class="nav-item"><a class="nav-link collapsed" href="#"
 				data-toggle="collapse" data-target="#collapsePayment"
-				aria-expanded="true" aria-controls="collapsePayment"> <i
+				aria-expanded="true" aria-controls="collapsePayment"
+                data-menu-key="approval"> <i
 					class="fas fa-fw fa-folder"></i> <span>전자결재</span>
 			</a>
 				<div id="collapsePayment" class="collapse"
@@ -124,7 +129,8 @@
 				</div></li>
 			<li class="nav-item"><a class="nav-link collapsed"
 				data-toggle="collapse" data-target="#collapseGroupWare"
-				aria-expanded="true" aria-controls="collapseGroupWare"> <i
+				aria-expanded="true" aria-controls="collapseGroupWare"
+                data-menu-key="notice,schedule,groupware,chat,privateChat"> <i
 					class="fas fa-fw fa-folder"></i> <span>그룹웨어</span>
 			</a>
 				<div id="collapseGroupWare" class="collapse"
@@ -151,7 +157,8 @@
 <!-- 				기준정보 관리 메뉴  -->   <!-- 관리자 권한만 보이게 수정 -->
 			<li class="nav-item"><a class="nav-link collapsed" sec:authorize="hasAuthority('ROLE_AUT001')"
 				data-toggle="collapse" data-target="#collapseMasterDate"
-				aria-expanded="true" aria-controls="collapseMasterDate"> <i
+				aria-expanded="true" aria-controls="collapseMasterDate"
+                data-menu-key="masterData,plant/equipment,plant/process,plant/process_route,quality/qcinfo,business/client,inventory/material,inventory/ware"> <i
 					class="fas fa-fw fa-folder"></i> <span>기준정보관리</span>
 			</a>
 				<div id="collapseMasterDate" class="collapse"
@@ -172,7 +179,8 @@
 			<!-- 				구매 관리메뉴 -->
 			<li class="nav-item"><a class="nav-link collapsed"
 				data-toggle="collapse" data-target="#purchase"
-				aria-expanded="true" aria-controls="purchase"> <i
+				aria-expanded="true" aria-controls="purchase"
+                data-menu-key="purchase"> <i
 					class="fas fa-fw fa-folder"></i> <span>구매관리</span>
 			</a>
 				<div id="purchase" class="collapse"
@@ -187,7 +195,8 @@
 				<!-- 				영업 관리 메뉴 -->
 			<li class="nav-item"><a class="nav-link collapsed"
 				data-toggle="collapse" data-target="#business"
-				aria-expanded="true" aria-controls="business"> <i
+				aria-expanded="true" aria-controls="business"
+                data-menu-key="business/order,business/shipment"> <i
 					class="fas fa-fw fa-folder"></i> <span>영업관리</span>
 			</a>
 				<div id="business" class="collapse"
@@ -202,7 +211,8 @@
 <!-- 					생산관리 메뉴  -->
 			<li class="nav-item"><a class="nav-link collapsed"
 				data-toggle="collapse" data-target="#pm"
-				aria-expanded="true" aria-controls="pm"> <i
+				aria-expanded="true" aria-controls="pm"
+                data-menu-key="pm"> <i
 					class="fas fa-fw fa-folder"></i> <span>생산관리</span>
 			</a>
 				<div id="pm" class="collapse" 	
@@ -217,7 +227,8 @@
 			<!-- 				공정 및 설비 매뉴  -->
 			<li class="nav-item"><a class="nav-link collapsed"
 				data-toggle="collapse" data-target="#plant"
-				aria-expanded="true" aria-controls="plant"> <i
+				aria-expanded="true" aria-controls="plant" 
+                data-menu-key="plant/maintenance,plant/equipment_list,plant/process_list,lot"> <i
 					class="fas fa-fw fa-folder"></i> <span>공정 및 설비</span>
 			</a>
 				<div id="plant" class="collapse"
@@ -234,8 +245,9 @@
 <!-- 			재고관리 메뉴 -->
 			<li class="nav-item"><a class="nav-link collapsed"
 				data-toggle="collapse" data-target="#inventory"
-				aria-expanded="true" aria-controls="inventory"> <i
-					class="fas fa-fw fa-folder"></i> <span>재고관리</span>
+				aria-expanded="true" aria-controls="inventory"
+                data-menu-key="inventory"> 
+                <i class="fas fa-fw fa-folder"></i> <span>재고관리</span>
 			</a>
 				<div id="inventory" class="collapse"
 					aria-labelledby="headingPages" data-parent="#accordionSidebar">
@@ -251,7 +263,8 @@
 <!-- 					품질관리 메뉴 -->
 			<li class="nav-item"><a class="nav-link collapsed"
 				data-toggle="collapse" data-target="#collapseQuality"
-				aria-expanded="true" aria-controls="collapseQuality"> <i
+				aria-expanded="true" aria-controls="collapseQuality"
+                data-menu-key="quality/qih"> <i
 					class="fas fa-fw fa-folder"></i> <span>품질관리</span>
 			</a>
 				<div id="collapseQuality" class="collapse"
@@ -267,11 +280,13 @@
 				</div></li>
 				
 			<!-- 				POP 메뉴  -->
-			<li class="nav-item"><a class="nav-link collapsed"
-				data-toggle="collapse" data-target="#pop"
-				aria-expanded="true" aria-controls="pop"> <i
-					class="fas fa-fw fa-folder"></i> <span>POP</span>
-			</a>
+            <li class="nav-item">
+              <a class="nav-link collapsed"
+                 data-toggle="collapse" data-target="#pop"
+                 aria-expanded="false" aria-controls="pop"
+                 data-menu-key="pop">
+                <i class="fas fa-fw fa-folder"></i> <span>POP</span>
+              </a>
 				<div id="pop" class="collapse" 	
 					aria-labelledby="headingPages" data-parent="#accordionSidebar">
 					<div class="bg-white py-2 collapse-inner rounded">
@@ -447,6 +462,43 @@
 				<!-- End of Topbar -->
 </th:block>
 <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const path = window.location.pathname.replace(/\/$/, "");
+
+    let opened = false;
+    document.querySelectorAll("[data-menu-key]").forEach(menu => {
+        if (opened) return;
+        const keys = menu.dataset.menuKey.split(",");
+        if (keys.some(k => path === "/" + k || path.startsWith("/" + k + "/"))) {
+            const target = document.querySelector(menu.getAttribute("data-target"));
+            if (target) {
+                target.classList.add("show");
+                menu.classList.remove("collapsed");
+                menu.setAttribute("aria-expanded", "true");
+                opened = true;
+            }
+        }
+    });
+
+    //active 처리 유지
+    document.querySelectorAll(".collapse-item").forEach(item => {
+        const href = item.getAttribute("href");
+        if (!href) return;
+        const cleanHref = href.replace(location.origin, "").replace(/\/$/, "");
+        if (path === cleanHref || path.startsWith(cleanHref + "/")) {
+            item.classList.add("active");
+        }
+    });
+
+    //깜빡임 제거용: 아주 짧게 있다가 transition 복구
+    setTimeout(() => {
+        document.querySelectorAll(".collapse").forEach(c => {
+            c.style.transition = "";
+        });
+    }, 50);
+});
+
+
 // 0829 결재 알림 업데이트
 function updateApprovalAlerts() {
     fetch('/approval/api/counts')
@@ -577,18 +629,4 @@ function createMessageItem(message) {
     `;
     return messageItem;
 }
-
-
-
-// 페이지 로드 시 실행
-document.addEventListener('DOMContentLoaded', function() {
-    updateApprovalAlerts();  
-    document.getElementById('alertsDropdown').addEventListener('click', updateApprovalAlerts);
-    connectWebsocket();
-    
- 	// 메뉴 상태 저장 함수 실행
-    setupMenuStateSaving();
-    // 메뉴 상태 복원 함수 실행 -> 가장 마지막에 실행되어야 모든 로드 후 상태를 적용할 수 있음
-    restoreMenuState();
-});
 </script>

@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	// 검색 버튼 클릭 시 실행
 	function filterClient() {
-		console.log("ALL CLIENT DATA EXAMPLE:", allClient[0]);
+		//console.log("ALL CLIENT DATA EXAMPLE:", allClient[0]);
 
 		const type = document.getElementById("cliType").value;
 		const status = document.getElementById("cliStatus").value;

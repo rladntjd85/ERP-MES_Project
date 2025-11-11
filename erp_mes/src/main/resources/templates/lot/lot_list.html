@@ -254,9 +254,6 @@ a[aria-expanded="true"]>.caret::before {
                   const type = ($trigger.data("type") || '').toString().toLowerCase();
                   const $ul  = $trigger.next('ul');
                   
-                  console.log("id===="+ id)
-                  console.log("type===="+ type)
-                  
                   if (!id || !type || !endpointByType[type]) {
                     console.warn('Invalid type or id for childList:', type, id);
                     return;
