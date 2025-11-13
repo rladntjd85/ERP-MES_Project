@@ -57,7 +57,12 @@
 							        <input type="text" id="commute_end_time" class="form-control form-control-sm" disabled th:value="${checkOutTimeStr}">
 							    </div>
 							    <div class="col-auto">
-							        <button id="checkOutBtn" class="btn btn-success btn-sm" style="min-width: 80px;">퇴근</button>
+                                    <button id="checkOutBtn" 
+                                            class="btn btn-success btn-sm" 
+                                            style="min-width: 80px;"
+                                            th:disabled="${checkInTimeStr == null or #strings.isEmpty(checkInTimeStr)}">
+                                            퇴근
+                                    </button>
 							    </div>
 							</div>
 							<div class="d-flex align-items-center gap-4">

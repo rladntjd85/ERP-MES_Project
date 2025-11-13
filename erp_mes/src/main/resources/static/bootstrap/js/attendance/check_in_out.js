@@ -1,5 +1,3 @@
-console.log("CSRF Header:", csrfHeader);
-console.log("CSRF Token:", csrfToken);
 
 // 출근 버튼
 	$(document).ready(function() {
@@ -59,7 +57,7 @@ console.log("CSRF Token:", csrfToken);
 	
 	    checkOutBtn.on("click", function() {
 // 	    	console.log("퇴근버튼 확인");
-	        if (!confirm("퇴근하시겠습니까?")) return;
+	        if (!confirm("퇴근하시겠습니까?")) return false;
 	
 	        $.ajax({
 	            url: "/attendance/checkOut",

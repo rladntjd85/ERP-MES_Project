@@ -164,9 +164,12 @@
 	                if (xhr.status === 401) {
 	                    alert("로그인이 필요합니다.");
 	                    window.location.href = "/login";
-	                } else if (xhr.status === 409) {
-	                    alert("이미 오늘 퇴근한 상태입니다.");
-	                    window.location.href = "/attendance/commuteList";
+	                } else if (xhr.status === 408) {
+	                    alert("출근하지 않았습니다.");
+	                    return false;
+                    } else if (xhr.status === 409) {
+                        alert("이미 오늘 퇴근한 상태입니다.");
+                        return false;                        
 	                } else {
 	                    alert("퇴근 처리 중 오류 발생: " + xhr.status);
 	                    console.error(xhr);

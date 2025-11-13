@@ -89,8 +89,6 @@ public class CommuteController {
 		model.addAttribute("startDate", startDate);
 		model.addAttribute("endDate", endDate);
 
-		log.info("commuteDTOList : " + commuteDTOList);		
-
 		return "/commute/commute_list";
 	}
 	
@@ -146,8 +144,27 @@ public class CommuteController {
 //			log.info("commuteCheckOut : " + commuteCheckOut);
 			return ResponseEntity.ok(commuteCheckOut);
 		} catch (IllegalStateException e) {
-			// 이미 출근 기록 있을 경우 409 Conflict 반환
-			return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+			log.info("checkin??"+e);
+			 String code = e.getMessage();
+
+	        if ("NO_CHECKIN".equals(code)) {
+	            // 출근 안 함 → 408
+	            return ResponseEntity
+	                    .status(HttpStatus.REQUEST_TIMEOUT)
+	                    .body(null);
+
+	        } else if ("ALREADY_CHECKOUT".equals(code)) {
+	            // 이미 퇴근 → 409
+	            return ResponseEntity
+	                    .status(HttpStatus.CONFLICT)
+	                    .body(null);
+
+	        } else {
+	            // 기타 예외 → 400
+	            return ResponseEntity
+	                    .status(HttpStatus.BAD_REQUEST)
+	                    .body(null);
+	        }
 		}
 	}
 

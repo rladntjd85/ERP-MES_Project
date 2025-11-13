@@ -82,11 +82,18 @@ public class CommuteService {
 	// 퇴근버튼
 	public CommuteDTO checkOut(String empId) {
 		
+		// 오늘 출근 기록이 있는지 확인
+	    int cnt = commuteMapper.getTodayCheckInCount(empId);
+//	    log.info("count : " + count);
+	    if (cnt <= 0) {
+	    	throw new IllegalStateException("NO_CHECKIN");
+	    }
+		
 		// 오늘 퇴근 기록이 있는지 확인
 		int count = commuteMapper.getTodayCheckOutCount(empId);
 //		log.info("count : " + count);
 		if (count > 0) {
-			throw new IllegalStateException("이미 오늘 퇴근 기록이 존재합니다.");
+			throw new IllegalStateException("ALREADY_CHECKOUT");
 		}
 		
 	    LocalDateTime now = LocalDateTime.now();
