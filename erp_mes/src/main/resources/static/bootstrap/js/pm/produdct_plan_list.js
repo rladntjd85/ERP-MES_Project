@@ -18,8 +18,6 @@ async function loadProductPlan() {
 	const productPlanList = await res.json();
 	
 	planGrid.resetData(productPlanList);
-	console.log("productPlanList : " + productPlanList);
-	
 }
 
 loadProductPlan();

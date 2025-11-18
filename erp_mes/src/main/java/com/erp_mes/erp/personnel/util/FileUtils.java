@@ -58,7 +58,7 @@ public class FileUtils {
 			
 			// 이미지 경로 및 파일 존재여부 판별하고, 파일 접근 가능 여부도 체크
 			if(Files.notExists(targetPath) || !Files.isReadable(targetPath)) {
-				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "허용되지 않은 경로 접근 시도!");
+//				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "허용되지 않은 경로 접근 시도!");
 			}
 			
 			// 파일의 MIME 타입(= 컨텐츠 타입) 설정(실제 파일로부터 타입 알아내기)

@@ -113,3 +113,46 @@ body {
     background-color: #f0f0f0 !important;
     cursor: pointer;
 }
+
+.grid-wrapper {
+  width: 100%;
+  overflow-x: auto;     /* ✅ 가로 스크롤 허용 */
+  overflow-y: hidden;
+}
+
+#orderGrid {
+  min-width: 1300px;    /* ✅ 컬럼 총합보다 약간 크게 — 스크롤 강제 생성 */
+}
+
+/* ✅ TUI Grid 기본 CSS 재정의 */
+.tui-grid-container {
+  width: 100% !important;
+}
+
+.tui-grid-table {
+  table-layout: fixed !important;
+}
+
+/* ✅ Bootstrap 카드/컨테이너에서 숨김 방지 */
+.card-body,
+.table-container,
+.section {
+  overflow-x: visible !important;
+}
+
+.grid-wrapper {
+  width: 100%;
+  overflow-x: auto;    /* 가로 스크롤 허용 */
+  overflow-y: hidden;
+}
+
+.tui-grid-container {
+  width: 100% !important;
+}
+
+.tui-grid-table {
+  table-layout: fixed !important;
+}
+#orderDetailGrid {
+  min-width: 1000px; /* 컬럼 개수에 맞게 조정 */
+}

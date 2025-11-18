@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.erp_mes.erp.attendance.dto.CommuteDTO;
 import com.erp_mes.erp.attendance.service.CommuteService;
+import com.erp_mes.erp.groupware.entity.Notice;
+import com.erp_mes.erp.groupware.repository.NoticeRepository;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -24,9 +26,11 @@ import lombok.extern.log4j.Log4j2;
 public class mainController {
 	
 	private final CommuteService commuteService;
+	private final NoticeRepository noticeRepository;
 	
-	public mainController(CommuteService commuteService) {
+	public mainController(CommuteService commuteService, NoticeRepository noticeRepository) {
 		this.commuteService = commuteService;
+		this.noticeRepository = noticeRepository;
 	}
 
 	// 출퇴근관리 리스트
@@ -66,13 +70,13 @@ public class mainController {
 //			log.info("endDate : " + endDate);		
 			
 			List<CommuteDTO> commuteDTOList = commuteService.getDeptCommuteList(paramMap);
+			List<Notice> notices = noticeRepository.findAll();
+			
+			model.addAttribute("notices", notices);
 			model.addAttribute("commuteDTOList", commuteDTOList);
 			model.addAttribute("startDate", startDate);
 			model.addAttribute("endDate", endDate);
 
-			log.info("commuteDTOList : " + commuteDTOList);	
-			
-			
 			// =================================
 			
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");

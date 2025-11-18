@@ -74,16 +74,31 @@
 						<div
 							class="card-header py-3 d-flex justify-content-between align-items-center">
 							<h6 class="m-0 font-weight-bold text-primary">직원 정보</h6>
-							<span class="badge badge-danger text-uppercase">미출근</span>
+                            <!-- 출근 상태 -->
+                            <span th:if="${#strings.isEmpty(checkInTimeStr)}"
+                                  class="badge badge-danger text-uppercase">
+                                미출근
+                            </span>
+
+                            <span th:if="${!#strings.isEmpty(checkInTimeStr)} 
+                                         and ${#strings.isEmpty(checkOutTimeStr)}"
+                                  class="badge badge-success text-uppercase">
+                                출근
+                            </span>
+
+                            <!-- 퇴근 상태 -->
+                            <span th:if="${!#strings.isEmpty(checkOutTimeStr)}"
+                                  class="badge badge-secondary text-uppercase">
+                                퇴근
+                            </span>
 						</div>
 						<div class="card-body">
 							<div class="d-flex align-items-center">
 								<div class="mr-3">
-										<img 
-											class="img-profile rounded-circle" 
-											style="width:70px; height:70px;"
-										 	th:src="@{/personnel/loginShowImg/{id}(id=${#authentication.principal.empId})}">
-										
+								    <img 
+    									class="img-profile rounded-circle" 
+    									style="width:70px; height:70px;"
+    								 	th:src="@{/personnel/loginShowImg/{id}(id=${#authentication.principal.empId})}">
 								</div>
 								<div>
 									<div class="text-gray-800 font-weight-bold">
@@ -106,16 +121,57 @@
 
 					<div class="card shadow mb-4">
 						<div class="card-body">
-							<p class="mb-0">결재 문서가 없습니다. 여유로운 하루 보내세요!</p>
+                            <div class="card-body">
+                                <div class="table-responsive d-none d-md-block">
+                                  <!-- 데스크탑용 테이블 -->
+                                  <table class="table table-hover text-center table-compact" id="dataTable1">
+                                    <thead>
+                                      <tr>
+                                        <th>순 번</th>
+                                        <th>공지 유형</th>
+                                        <th>공지 제목</th>
+                                        <th>공지 내용</th>
+                                        <th>작성자</th>
+                                        <th>등록일</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr th:each="notice, stat : ${notices}">
+                                        <td th:text="${stat.count}">1</td>
+                                        <td th:text="${notice.notType}">인사</td>
+                                        <td><a href="#" data-toggle="modal"
+                                               data-target="#noticeModal"
+                                               th:data-id="${notice.notId}"
+                                               th:data-title="${notice.notTitle}"
+                                               th:data-content="${notice.notContent}"
+                                               th:data-author="${notice.employee.name}"
+                                               th:data-date="${#temporals.format(notice.createAt, 'yyyy-MM-dd')}">
+                                               <span th:text="${notice.notTitle}">공지 제목</span>
+                                            </a></td>
+                                        <td th:text="${notice.notContent}">내용</td>
+                                        <td th:text="${notice.employee.name}">관리자</td>
+                                        <td th:text="${#temporals.format(notice.createAt, 'yyyy-MM-dd')}">2025-09-29</td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+
+                                <!-- 모바일용 카드 목록 -->
+                                <div class="notice-card-list d-md-none">
+                                  <div class="card mb-2" th:each="notice : ${notices}">
+                                    <div class="card-body p-2">
+                                      <h6 class="fw-bold mb-1" th:text="${notice.notTitle}">공지 제목</h6>
+                                      <p class="text-muted mb-1 small" th:text="${notice.notContent}">공지 내용</p>
+                                      <div class="d-flex justify-content-between">
+                                        <small th:text="${notice.employee.name}">관리자</small>
+                                        <small th:text="${#temporals.format(notice.createAt, 'yyyy-MM-dd')}">2025-09-29</small>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
 						</div>
 					</div>
-
-					<div class="card shadow mb-4">
-						<div class="card-body">
-							<p class="mb-0">확인해야 할 수신 문서가 없습니다!</p>
-						</div>
-					</div>
-
 				</div>
 			</div>
 		</div>
@@ -264,5 +320,6 @@
 	<th:block layout:fragment="script">
 		<script th:src="@{/bootstrap/js/groupware/schedule.js}"></script>
 		<script th:src="@{/bootstrap/js/attendance/check_in_out.js}"></script>
+        <script th:src="@{/bootstrap/js/groupware/notice.js}"></script>
 	</th:block>
 </html>

@@ -320,8 +320,6 @@ public class CommuteController {
 	    // 삭제된 출근 로그데이터 가져오기
 	    List<CommuteDeleteLogDTO> CommuteDeleteLogDTOList = commuteService.getLogData();
 	    model.addAttribute("CommuteDeleteLogDTOList", CommuteDeleteLogDTOList);
-	    log.info("CommuteDeleteLogDTOList : " + CommuteDeleteLogDTOList);
-	    
 		
 		return "/commute/commute_data_log_list";
 	}

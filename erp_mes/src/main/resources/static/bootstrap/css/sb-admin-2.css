@@ -11294,3 +11294,21 @@ body.sidebar-toggled footer.sticky-footer {
   background-color: #eaecf4;
   border-radius: 4px;
 }
+@media (max-width: 992px) {
+  #dataTable1 th, #dataTable1 td {
+    font-size: 13px;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 768px) {
+  #dataTable1 {
+    font-size: 12px;
+  }
+  #dataTable1 th:nth-child(2),
+  #dataTable1 td:nth-child(2),
+  #dataTable1 th:nth-child(4),
+  #dataTable1 td:nth-child(4) {
+    display: none; /* 불필요한 열 숨김 */
+  }
+}

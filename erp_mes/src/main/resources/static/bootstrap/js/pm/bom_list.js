@@ -34,7 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             window.bomGrid.resetData(bomList);
-            console.log(`BOM for product ${productId}:`, bomList);
         } catch (err) {
             console.error("BOM 로드 실패:", err);
         }
@@ -46,7 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const rowData = window.prodGrid.getRow(ev.rowKey);
             if (rowData) {
                 window.selectedProduct = rowData;
-                console.log("선택된 제품:", window.selectedProduct);
 
                 if (typeof window.loadBomByProduct === "function") {
                     window.loadBomByProduct(rowData.productId);
@@ -110,8 +108,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	
 	
     // BOM 등록 AJAX 처리
-	console.log("CSRF Header:", csrfHeader);
-	console.log("CSRF Token:", csrfToken);
 
     document.getElementById("bomRegisterBtn").addEventListener("click", async () => {
         const form = document.getElementById("bomForm");
@@ -138,7 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		    }
 		});
 
-		console.log("전송 데이터:", data);
 		
         try {
             const res = await fetch("/masterData/bomRegist", {

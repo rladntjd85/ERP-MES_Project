@@ -1,8 +1,3 @@
-
-console.log("CSRF Header:", csrfHeader);
-console.log("CSRF Token:", csrfToken);
-
-
 document.getElementById("planSelect").addEventListener("change", async (e) => {
     const planId = e.target.value;
     if (!planId) return;
@@ -19,14 +14,12 @@ document.getElementById("planSelect").addEventListener("change", async (e) => {
 		// 등록용 히든값들
 		document.getElementById("plan_id").value = dataPlan.planId;
 		document.getElementById("bom_id").value = dataPlan.bomId;
-		console.log("planId:", dataPlan.planId, "bomId:", dataPlan.bomId);
 
         // BOM + 자재 재고 가져오기
         const resBom = await fetch(`/pm/workOderInventory?plan_id=${planId}`);
         if (!resBom.ok) throw new Error("자재 정보 불러오기 실패");
 
         const bomList = await resBom.json();
-		console.log("bomList:", bomList);
 
         // div#MATERIAL_CNT 초기화
         const materialDiv = document.getElementById("MATERIAL_CNT");
@@ -89,30 +82,32 @@ document.getElementById("planSelect").addEventListener("change", async (e) => {
 	    // FormData → JSON 변환
 	    const data = {};
 	    formData.forEach((value, key) => {
-			console.log(key, value);
 	        data[key] = value;
 	    });
 
 	    try {
-	        const res = await fetch("/pm/workOrderRegist", {
-	            method: "POST",
-	            headers: {
-	                "Content-Type": "application/json",
-					[csrfHeader]: csrfToken
-	            },
-	            body: JSON.stringify(data)
-	        });
+            const res = await fetch("/pm/workOrderRegist", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    [csrfHeader]: csrfToken
+                },
+                body: JSON.stringify(data)
+            });
 
-	        if (res.ok) {
-	            alert("작업지시서가 등록되었습니다!");
-	            // 모달 닫기
-				$('#workOrderRegisterModal').modal('hide');
+            const result = await res.json(); // JSON 응답 파싱
 
-	            // 제품 목록 새로고침
-	            location.reload();
-	        } else {
-	            alert("등록 실패!");
-	        }
+            console.log("등록 결과:", result);
+
+            if (res.ok && result.status === "success") {
+                alert(result.message); // "작업지시 등록 완료"
+                $('#workOrderRegisterModal').modal('hide');
+                location.reload();
+            } else if (result.status === "fail") {
+                alert(result.message); // "자재 재고가 부족합니다."
+            } else {
+                alert("작업지시 등록 중 오류가 발생했습니다.");
+            }
 	    } catch (err) {
 	        console.error(err);
 	        alert("오류 발생");

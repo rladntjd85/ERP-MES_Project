@@ -5,7 +5,7 @@ const prodGrid = new tui.Grid({
     { header: '제품 코드', name: 'productId', sortable: true, align: 'center' },
     { header: '제품명', name: 'productName', sortable: true, align: 'center' },
     { header: '제품 구분', name: 'productType', sortable: true, align: 'center' },
-    { header: '가격', name: 'price', sortable: true, align: 'center' },
+    { header: '가격(원)', name: 'price', sortable: true, align: 'center' },
     { header: '단위', name: 'unit', sortable: true, align: 'center' },
     { header: '등록일', name: 'createdAt', sortable: true, align: 'center' },
   ],
@@ -15,9 +15,11 @@ const prodGrid = new tui.Grid({
 async function loadProducts() {
 	const res = await fetch('productList');
 	const productList = await res.json();
+    productList.forEach(p => {
+      p.price = Number(p.price).toLocaleString(); // "1,234,567"
+    });
 	
 	prodGrid.resetData(productList);
-	console.log("productList : " + productList);
 	
 }
 
@@ -44,7 +46,6 @@ loadProducts();
 	prodGrid.on('click', ev => {
 	    const rowData = prodGrid.getRow(ev.rowKey);
 	    if (rowData) {
-	        console.log("선택된 제품:", rowData);
 	        window.selectedProduct = rowData;
 	        window.loadBomByProduct(rowData.productId);
 	    }

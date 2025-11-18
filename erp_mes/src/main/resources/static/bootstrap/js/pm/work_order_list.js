@@ -31,8 +31,6 @@ async function loadWorkOrder() {
 	const workOrderList = await res.json();
 	
 	workOrderGrid.resetData(workOrderList);
-	console.log("workOrderList : " + workOrderList);
-	
 }
 
 loadWorkOrder();

@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		// 수주 목록 그리드 초기화
 		orderGrid = new tui.Grid({
 			el: document.getElementById('orderGrid'),
-			scrollX: false,
+			scrollX: true,
 			scrollY: true,
 			bodyHeight: 200,
 			rowHeight: 'auto',
@@ -167,7 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		// 수주 상세 목록을 위한 그리드 인스턴스
 		orderDetailGrid = new tui.Grid({
 			el: document.getElementById('orderDetailGrid'),
-			scrollX: false,
+			scrollX: true,
 			scrollY: true,
 			bodyHeight: 200,
 			minBodyHeight: 200,

@@ -269,7 +269,6 @@ a[aria-expanded="true"]>.caret::before {
                       xhr.setRequestHeader(header, token);
                     },
                     success: function (data) {
-                       console.log(data)
                       renderChildren($ul, data, type);
                     },
                     error: function (xhr) {

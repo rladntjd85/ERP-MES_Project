@@ -72,9 +72,9 @@
 		                            <td th:text="${c.logId}"></td>
 		                            <td th:text="${c.commuteDate}"></td>
 		                            <td th:text="${#temporals.format(c.deletedAt, 'HH:mm:ss')}"></td>
-		                            <td th:text="${c.empId}"></td>
+		                            <td th:text="${c.adminNm + ' (' + c.empId + ')'}"></td>
 		                            <td th:text="${c.deleteReason}"></td>
-		                            <td th:text="${c.targetEmpId}"></td>
+		                            <td th:text="${c.targetEmpNm + ' (' + c.targetEmpId + ')'}"></td>
 		                            <td>
 			                            <button class="detailBtn btn btn-secondary btn-sm"
 			                            		th:data-emp-id="${c.empId}"

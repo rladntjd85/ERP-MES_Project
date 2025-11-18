@@ -86,11 +86,10 @@ public class PmService {
 	}
 
 	// 작업지시 등록
-	public void insertWorkOrder(WorkOrderDTO workOrderDTO) {
+	public String insertWorkOrder(WorkOrderDTO workOrderDTO) {
 		
 		// bom 자재 조회
 	    List<BomDTO> bomList = pmMapper.getMaterialsByBomId(workOrderDTO.getBomId());
-	    log.info(">>>>>>>>>>>>>>> bomList : " + bomList);
 
 	    // 상태값 결정
 	    boolean shortageExists = false;
@@ -118,6 +117,8 @@ public class PmService {
 		
 		// 생산계획 상태값 변경
 		pmMapper.updatePlanStatus(workOrderDTO.getPlanId());
+		
+		return workOrderDTO.getWorkOrderStatus();
 		
 	}
 

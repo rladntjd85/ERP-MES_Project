@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -152,17 +153,29 @@ public class PmController {
 	// 작업지시 등록
 	@ResponseBody
 	@PostMapping("/workOrderRegist")
-	public String registWorkOrder(@RequestBody WorkOrderDTO workOrderDTO) {
-		log.info(">>> workOrderDTO=" + workOrderDTO);
+	public ResponseEntity<?> registWorkOrder(@RequestBody WorkOrderDTO workOrderDTO) {
 		
-//		log.info(">>> bomId=" + workOrderDTO.getBomId());
-//		log.info(">>> planId=" + workOrderDTO.getPlanId());
-//		log.info(">>> lineId=" + workOrderDTO.getLineId());
-//		log.info(">>> empId=" + workOrderDTO.getEmpId());
-		
-		pmService.insertWorkOrder(workOrderDTO);
-		
-		return "sucess";
+		try {
+	        // 서비스 호출 (결과 반환)
+	        String result = pmService.insertWorkOrder(workOrderDTO);
+	        
+	        // 성공 시
+	        if ("재고부족".equals(result)) {
+	            return ResponseEntity
+	                    .status(HttpStatus.OK)
+	                    .body(Map.of("status", "fail", "message", "자재 재고가 부족합니다."));
+	        } else {
+	            return ResponseEntity
+	                    .status(HttpStatus.OK)
+	                    .body(Map.of("status", "success", "message", "작업지시 등록 완료"));
+	        }
+
+	    } catch (Exception e) {
+	        log.error("작업지시 등록 중 오류 발생", e);
+	        return ResponseEntity
+	                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                .body(Map.of("status", "error", "message", "서버 오류 발생"));
+	    }
 	}
 	
 	// 발주자재 정보

@@ -1,8 +1,4 @@
 
-console.log("CSRF Header:", csrfHeader);
-console.log("CSRF Token:", csrfToken);
-
-	
 	// 제품 등록 ajax
 	document.getElementById("productRegisterBtn").addEventListener("click", async () => {
 	    const form = document.getElementById("productForm");

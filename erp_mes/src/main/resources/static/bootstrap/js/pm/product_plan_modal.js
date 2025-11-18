@@ -42,7 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const res = await fetch('/pm/ordersList');
             const ordersList = await res.json();
             if (orderGrid) orderGrid.resetData(ordersList);
-            console.log("ordersList : ", ordersList);
         } catch (err) {
             console.error("수주 리스트 로드 실패:", err);
         }
@@ -53,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const res = await fetch(`/pm/ordersProduct?order_id=${orderId}&id=${id}`);
             const products = await res.json();
-            console.log("products : ", products);
 
             if (products.length > 0) {
                 const p = products[0]; // 어차피 orderId + id는 unique
@@ -81,9 +79,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const form = document.getElementById("planForm");
         const formData = new FormData(form);
 
-		for (let pair of formData.entries()) {
+		/*for (let pair of formData.entries()) {
 		    console.log(pair[0]+ ': ' + pair[1]);  // 확인
-		}
+		}*/
 		
 		
         const data = {};
@@ -100,6 +98,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify(data)
             });
+            
+            console.log(">>>>>>>"+res)
 
             if (res.ok) {
                 alert("생산계획이 등록되었습니다!");
