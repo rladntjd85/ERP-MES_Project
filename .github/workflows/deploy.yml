@@ -13,7 +13,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      # 2. 디버그 (원하면 삭제 가능)
+      # (선택) 구조 확인용 로그
       - name: Debug list files
         run: |
           echo "=== ROOT FILES ==="
@@ -21,31 +21,72 @@ jobs:
           echo "=== erp_mes FILES ==="
           ls -al erp_mes
 
-      # 3. Java 설치
+      # 2. Java 설치
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      # 4. Gradle 빌드 (erp_mes 폴더 내부 빌드)
+      # 3. application.properties 자동 생성 (Secrets 사용)
+      - name: Create application.properties
+        run: |
+          cd erp_mes
+          cat << 'EOF' > src/main/resources/application.properties
+          spring.application.name=erp_mes
+          server.port=8080
+
+          spring.jpa.hibernate.ddl-auto=validate
+          logging.level.org.hibernate.SQL=DEBUG
+          logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+          spring.jpa.show-sql=true
+          spring.jpa.properties.hibernate.format_sql=true
+          logging.level.org.springframework.security=INFO
+
+          spring.config.import=application-db.properties
+
+          spring.servlet.multipart.max-file-size=5MB
+          spring.servlet.multipart.max-request-size=25MB
+          file.uploadBaseLocation=/usr/local/tomcat/upload
+          file.itemImgLocation=/personnel/img
+
+          service.key=${{ secrets.SERVICE_KEY }}
+          data.go.kr.api.key=${{ secrets.DATA_GO_KR_API_KEY }}
+
+          mybatis.mapper-locations=classpath:mapper/*.xml
+          mybatis.configuration.map-underscore-to-camel-case=true
+          mybatis.type-aliases-package=com.erp_mes.erp.approval.dto,com.erp_mes.erp.commonCode,com.erp_mes.erp.groupware.dto,com.erp_mes.erp.personnel.dto,com.erp_mes.mes.business.dto,com.erp_mes.mes.lot.dto,com.erp_mes.mes.plant.dto,com.erp_mes.pm.dto,com.erp_mes.mes.pop.dto,com.erp_mes.mes.purchase.dto,com.erp_mes.mes.quality.dto,com.erp_mes.mes.stock.dto
+          EOF
+
+      # 4. application-db.properties 자동 생성 (DB Secrets 사용)
+      - name: Create application-db.properties
+        run: |
+          cd erp_mes
+          cat << 'EOF' > src/main/resources/application-db.properties
+          spring.datasource.url=${{ secrets.DB_URL }}
+          spring.datasource.username=${{ secrets.DB_USERNAME }}
+          spring.datasource.password=${{ secrets.DB_PASSWORD }}
+          spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
+          EOF
+
+      # 5. Gradle 빌드
       - name: Build Spring Boot Jar
         run: |
           cd erp_mes
           chmod +x gradlew
           ./gradlew clean build -x test
 
-      # 5. Docker 이미지 빌드 경로 수정됨 (중요!)
+      # 6. Docker 이미지 빌드
       - name: Build Docker Image
         run: |
           docker build -t myapp ./erp_mes
 
-      # 6. Docker 이미지 tar로 저장
+      # 7. Docker 이미지 tar로 저장
       - name: Save Docker Image
         run: |
           docker save myapp > myapp.tar
 
-      # 7. TAR 파일을 EC2로 복사
+      # 8. TAR 파일을 EC2로 복사
       - name: Copy Image to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -55,7 +96,7 @@ jobs:
           source: "myapp.tar"
           target: "~/"
 
-      # 8. EC2에서 배포
+      # 9. EC2에서 기존 컨테이너 종료 후 새 배포
       - name: Deploy on EC2
         uses: appleboy/ssh-action@v0.1.7
         with:
@@ -68,8 +109,6 @@ jobs:
 
             docker load < ~/myapp.tar
 
-            docker run -d -p 8080:8080 --name spring \
-              -e SPRING_DATASOURCE_URL=jdbc:oracle:thin:@localhost:1521/FREEPDB1 \
-              -e SPRING_DATASOURCE_USERNAME=C##TEAM1 \
-              -e SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            docker run -d --name spring \
+              -p 8080:8080 \
               myapp
