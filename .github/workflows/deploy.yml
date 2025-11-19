@@ -118,5 +118,6 @@ jobs:
             docker load < ~/myapp.tar
 
             docker run -d --name spring \
+              --network=mynetwork \
               -p 8080:8080 \
               myapp
