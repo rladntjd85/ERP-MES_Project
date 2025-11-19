@@ -30,7 +30,7 @@ public class WebController {
 		//로그인 화면 진입시 로그인 정보가 존재할경우 메인으로 리다이렉트
 		if(loginDTO != null) {
 			// 쿠키값 Model 객체에 추가
-			return "redirect:main";
+			return "redirect:/main";
 		}else {
 			
 			model.addAttribute("rememberId", rememberId);
