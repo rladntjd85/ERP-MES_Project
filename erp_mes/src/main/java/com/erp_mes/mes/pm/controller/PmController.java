@@ -60,7 +60,7 @@ public class PmController {
 		
 		
 		
-		return "/pm/product_plan_list";
+		return "pm/product_plan_list";
 	}
 	
 	// 생산계획 리스트 그리드
@@ -121,7 +121,7 @@ public class PmController {
 		
 		
 		
-		return "/pm/work_order_list";
+		return "pm/work_order_list";
 	}
 	
 	// 작업지시서 리스트 그리드

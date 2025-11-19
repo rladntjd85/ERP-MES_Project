@@ -242,16 +242,16 @@ public class PersonnelController {
 //			log.info("인사 팀 또는 관리자 계정으로 진입");
 			
 			
-			return "/hrn/personnelDetailInfo";
+			return "hrn/personnelDetailInfo";
 		}else {
 //			log.info("인사팀 외 계정 또는 일반 계정");
 
 			
-			return "/hrn/personnelDetailInfo2";
+			return "hrn/personnelDetailInfo2";
 		}
 
 		
-//        return "/hrn/personnelDetailInfo";
+//        return "hrn/personnelDetailInfo";
        
 		
     }
@@ -334,7 +334,7 @@ public class PersonnelController {
 		if("DEP001".equals(personnelLoginDTO.getEmpDeptId()) || "AUT001".equals(personnelLoginDTO.getEmpLevelId())) {
 //			log.info("인사팀 혹은 관리자 계정입니다. 접속 허용합니다.");
 			
-			return "/hrn/personnelRegist";
+			return "hrn/personnelRegist";
 		}else {
 			return "redirect:/main";
 		}
@@ -367,7 +367,7 @@ public class PersonnelController {
         
 		model.addAttribute("personnelTransfer", personnelTransfer);
 		
-		return "/hrn/personnelTrans";
+		return "hrn/personnelTrans";
 	}
 	
 	// 인사발령 정보 출력
@@ -398,7 +398,7 @@ public class PersonnelController {
         List<PersonnelDTO> approvers = personnelService.getEmployeesByDeptIdLevel("DEP001", "AUT001", "AUT002");
         model.addAttribute("approvers", approvers);
 
-        return "/hrn/personnelTransSave";  
+        return "hrn/personnelTransSave";  
     }
 	
 	// 전자결재로 넘김
@@ -436,7 +436,7 @@ public class PersonnelController {
         // 모델에 직원 목록을 추가하여 초기 화면에 표시
         model.addAttribute("personnels", personnels);
 
-        return "/hrn/orgChart"; 
+        return "hrn/orgChart"; 
     }
 	
     // AJAX 요청을 처리하여 특정 부서의 직원 정보를 JSON 형태로 반환

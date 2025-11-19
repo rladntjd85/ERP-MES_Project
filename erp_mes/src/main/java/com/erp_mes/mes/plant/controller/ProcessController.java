@@ -52,13 +52,13 @@ public class ProcessController {
 		model.addAttribute("comList", comList);
 		
 		
-		return "/plant/process";
+		return "plant/process";
 	}
 	@GetMapping("/process_list")		//공정 현황 페이지로 변경
 	public String process_list() {
 		log.info("공정 현황 페이지");
 		
-		return "/plant/process_list";
+		return "plant/process_list";
 	}
 	
 	
@@ -95,7 +95,7 @@ public class ProcessController {
 		
 		
 		
-		return "/plant/equipment";
+		return "plant/equipment";
 	}
 	
 	@GetMapping("/equipment_list")
@@ -103,7 +103,7 @@ public class ProcessController {
 		log.info("설비 현황 페이지");
 
 		
-		return "/plant/equipment_list";
+		return "plant/equipment_list";
 	}
 	@GetMapping("/maintenance")
 	public String equip_fix(Model model) {
@@ -114,7 +114,7 @@ public class ProcessController {
 		model.addAttribute("equipList", equipList);
 		
 		
-		return "/plant/maintenance";
+		return "plant/maintenance";
 	}
 	/* 모달창으로 변경
 	@GetMapping("/fix_newForm")
@@ -125,7 +125,7 @@ public class ProcessController {
 		
 		model.addAttribute("equipList", equipList);
 		
-		return "/plant/fix_newForm";
+		return "plant/fix_newForm";
 	}*/
 	@GetMapping("/fix_history")
 	public String fix_history(Model model,
@@ -134,7 +134,7 @@ public class ProcessController {
 		
 		model.addAttribute("equipList",equipList);
 		
-		return "/plant/fix_history";
+		return "plant/fix_history";
 	}
 	@ResponseBody
 	@GetMapping("/fixHistoryGrid")
@@ -144,7 +144,7 @@ public class ProcessController {
 		
 		model.addAttribute("equipList",equipList);
 		
-		return "/plant/fix_history";
+		return "plant/fix_history";
 	}
 	
 	
@@ -211,7 +211,7 @@ public class ProcessController {
 		
 		
 		
-		return "/plant/process_route";
+		return "plant/process_route";
 	}
 /*	모달 창으로 변경
 	@GetMapping("/route_newForm")
@@ -226,7 +226,7 @@ public class ProcessController {
 		model.addAttribute("equipList", equipList);
 		
 		
-		return "/plant/route_newForm";
+		return "plant/route_newForm";
 	}
 	*/
 	

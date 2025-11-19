@@ -51,7 +51,7 @@ public class mainController {
 		    } else {
 		        // 로그인 안 된 상태라면 로그인 페이지로
 		        return "redirect:/login";
-//		        return "/commute/commute_list";
+//		        return "commute/commute_list";
 		    }
 		    // ==============================================================================
 			

@@ -37,7 +37,7 @@ public class DefectController {
 		List<CommonDetailCode> defectTypes = commonCodeService.findByComId("DEFECT");
 		model.addAttribute("defectTypes", defectTypes);
 
-		return "/qc/defect";
+		return "qc/defect";
 	}
 
 	// 불량 내역 상세 조회를 위한 API 엔드포인트

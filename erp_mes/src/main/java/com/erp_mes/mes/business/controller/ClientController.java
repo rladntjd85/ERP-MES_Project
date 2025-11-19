@@ -44,7 +44,7 @@ public class ClientController {
         boolean isAutLevel = "AUT001".equals(userLevelId);
         model.addAttribute("isAUTLevel", isAutLevel);
 		
-		return "/business/client";
+		return "business/client";
 	}
 	
 	// 거래처 전체 목록 조회

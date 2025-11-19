@@ -57,7 +57,7 @@ public class ApprController {
 		model.addAttribute("documents", documents);
 		
 		
-	    return "/approval/appr_doc_list";
+	    return "approval/appr_doc_list";
 	}
 
     @GetMapping("/new/{docId}")

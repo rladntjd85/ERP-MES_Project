@@ -49,7 +49,7 @@ public class OrderController {
         boolean isAutLevel = "AUT001".equals(userLevelId);
         model.addAttribute("isAUTLevel", isAutLevel);
 
-		return "/business/order";
+		return "business/order";
 	}
 	
 	// 수주 등록

@@ -52,7 +52,7 @@ public class GroupwareController {
 		List<DocumentDTO> documents = documentService.getAllDocuments();
 		model.addAttribute("documents", documents);
 		
-		return "/gw/document";
+		return "gw/document";
 	}
 	
 	//공통 문서 작성 & 수정 화면

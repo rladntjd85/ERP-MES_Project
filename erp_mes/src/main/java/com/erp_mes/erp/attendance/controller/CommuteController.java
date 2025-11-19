@@ -66,7 +66,7 @@ public class CommuteController {
 	    } else {
 	        // 로그인 안 된 상태라면 로그인 페이지로
 	        return "redirect:/login";
-//	        return "/commute/commute_list";
+//	        return "commute/commute_list";
 	    }
 	    // ==============================================================================
 		
@@ -89,7 +89,7 @@ public class CommuteController {
 		model.addAttribute("startDate", startDate);
 		model.addAttribute("endDate", endDate);
 
-		return "/commute/commute_list";
+		return "commute/commute_list";
 	}
 	
 
@@ -187,7 +187,7 @@ public class CommuteController {
 	    } else {
 	        // 로그인 안 된 상태라면 로그인 페이지로
 //	        return "redirect:/login";
-	        return "/commute/commute_list"; // 추후에 메인사이트로 이동하게끔 변경
+	        return "commute/commute_list"; // 추후에 메인사이트로 이동하게끔 변경
 	    }
 	    // ==============================================================================
 	    
@@ -236,7 +236,7 @@ public class CommuteController {
 	    log.info("adminCommuteList :" + adminCommuteList);
 		
 	    
-		return "/commute/admin_commute_list";
+		return "commute/admin_commute_list";
 	}
 	
 	// 수정버튼
@@ -314,14 +314,14 @@ public class CommuteController {
 	    } else {
 	        // 로그인 안 된 상태라면 로그인 페이지로
 	        return "redirect:/login";
-//	        return "/commute/commute_list";
+//	        return "commute/commute_list";
 	    }
 	    
 	    // 삭제된 출근 로그데이터 가져오기
 	    List<CommuteDeleteLogDTO> CommuteDeleteLogDTOList = commuteService.getLogData();
 	    model.addAttribute("CommuteDeleteLogDTOList", CommuteDeleteLogDTOList);
 		
-		return "/commute/commute_data_log_list";
+		return "commute/commute_data_log_list";
 	}
 	
 	

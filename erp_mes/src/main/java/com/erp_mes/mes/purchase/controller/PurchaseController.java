@@ -50,7 +50,7 @@ public class PurchaseController {
         boolean isAutLevel = "AUT001".equals(userLevelId);
         model.addAttribute("isAUTLevel", isAutLevel);
 
-		return "/purchase/purchaseOrder";
+		return "purchase/purchaseOrder";
 	}
 
 	// 발주 등록
