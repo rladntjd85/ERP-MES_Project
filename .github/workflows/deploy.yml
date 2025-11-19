@@ -27,7 +27,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # Build JAR
+      # Build
       - name: Build JAR
         run: |
           cd erp_mes
@@ -38,11 +38,11 @@ jobs:
       - name: Build Docker Image
         run: docker build -t myapp ./erp_mes
 
-      # Save to tar
+      # Save image
       - name: Save Docker Image
         run: docker save myapp > myapp.tar
 
-      # Copy to EC2
+      # Upload to EC2
       - name: Upload to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -52,7 +52,7 @@ jobs:
           source: "myapp.tar"
           target: "~"
 
-      # Run on EC2
+      # Deploy on EC2
       - name: Deploy on EC2
         uses: appleboy/ssh-action@v0.1.7
         with:
@@ -60,13 +60,20 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            # Create network if not exists
+            docker network create mynetwork 2>/dev/null || true
+
+            # Stop previous container
             docker stop spring 2>/dev/null || true
             docker rm spring 2>/dev/null || true
 
+            # Load new image
             docker load < ~/myapp.tar
 
+            # Run
             docker run -d --name spring \
               --network=mynetwork \
+              --restart=always \
               -p 8080:8080 \
               -e DB_URL="${{ secrets.DB_URL }}" \
               -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
@@ -74,3 +81,6 @@ jobs:
               -e SERVICE_KEY="${{ secrets.SERVICE_KEY }}" \
               -e DATA_GO_KR_API_KEY="${{ secrets.DATA_GO_KR_API_KEY }}" \
               myapp
+
+            # Cleanup old images
+            docker image prune -f
