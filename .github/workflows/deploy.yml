@@ -69,13 +69,13 @@ jobs:
       # 5. application-db.properties 자동 생성 (DB Secrets 사용)
       - name: Create application-db.properties
         run: |
-          cd erp_mes
-          cat << EOF > src/main/resources/application-db.properties
-          spring.datasource.url=${{ secrets.DB_URL }}
-          spring.datasource.username=${{ secrets.DB_USERNAME }}
-          spring.datasource.password=${{ secrets.DB_PASSWORD }}
-          spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
-          EOF
+          mkdir -p src/main/resources
+          cat <<EOF > src/main/resources/application-db.properties
+            spring.datasource.url=${{ secrets.DB_URL }}
+            spring.datasource.username=${{ secrets.DB_USERNAME }}
+            spring.datasource.password=${{ secrets.DB_PASSWORD }}
+            spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
+            EOF
 
       # 6. Gradle 빌드
       - name: Build Spring Boot Jar
