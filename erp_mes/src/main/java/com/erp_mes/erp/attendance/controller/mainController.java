@@ -96,6 +96,6 @@ public class mainController {
 		    }
 
 
-			return "/main";
+			return "main";
 		}
 }
