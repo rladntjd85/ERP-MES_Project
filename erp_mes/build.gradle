@@ -1,85 +1,73 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.5.4'
-	id 'io.spring.dependency-management' version '1.1.7'
+    id 'java'
+    id 'org.springframework.boot' version '3.5.4'
+    id 'io.spring.dependency-management' version '1.1.7'
 }
-
-apply plugin: 'war'
 
 group = 'com.erp_mes'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
-	}
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
-	
-	// Log4j2 라이브러리 사용을 위해 기본 로깅 라이브러리(Logback => spring-boot-starter-logging) 제외시키기
-	all {
-		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    all {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-aop'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'com.h2database:h2'
-	runtimeOnly 'com.mysql:mysql-connector-j'
-	//implementation 'com.oracle.database.jdbc:ojdbc11'		// implementation 로 변경
-	implementation 'com.oracle.database.jdbc:ojdbc11:23.4.0.24.05'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	// https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
-	
-	// 웹소켓, SockJS, STOMP 프로토콜 관련 의존성
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    implementation 'com.oracle.database.jdbc:ojdbc11:23.4.0.24.05'
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // Thymeleaf extras
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+
+    // MyBatis
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
+
+    // WebSocket
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     implementation 'org.webjars:sockjs-client:1.5.1'
     implementation 'org.webjars:stomp-websocket:2.3.4'
-	
-	// 스프링 시큐리티 의존성
-	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
-	testImplementation 'org.springframework.security:spring-security-test'
 
-	// 타임리프 레이아웃 사용 시 간결한 문법으로 바꾸기 위한 의존성
-	// https://mvnrepository.com/artifact/nz.net.ultraq.thymeleaf/thymeleaf-layout-dialect
-	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.4.0'
-	
-	// 서로 다른 클래스(객체)간의 변환을 자동으로 수행해주는 라이브러리
-	// https://mvnrepository.com/artifact/org.modelmapper/modelmapper
-	implementation 'org.modelmapper:modelmapper:3.2.4'
-	
-	// 스프링부트 로그 라이브러리 - Log4j2
-	// => 주의! 스프링부트 스타터 패키지내에 기본 로깅 라이브러리가 포함되어 있으므로 해당 라이브러리만 수동 제거해야함
-	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-log4j2
-	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
-	
-	// 콘솔 컬러링, JPA SQL 로그 분석 등에 활용 가능한 log4j-slf4j-impl 라이브러리도 추가(선택사항)
-	// https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j2-impl
-	implementation 'org.apache.logging.log4j:log4j-slf4j2-impl'
-	
-	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    // Logging: Log4j2
+    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+    implementation 'org.apache.logging.log4j:log4j-slf4j2-impl'
+
+    // Layout dialect
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.4.0'
+
+    // ModelMapper
+    implementation 'org.modelmapper:modelmapper:3.2.4'
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
 
 bootJar {
