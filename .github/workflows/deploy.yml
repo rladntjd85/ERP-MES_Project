@@ -2,41 +2,37 @@ name: Deploy to EC2
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      ### 1. 레포지토리 체크아웃
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      ### 2. JDK 17 설치
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      ### 3. Gradle Wrapper 실행 권한 부여 + 빌드
       - name: Build Spring Boot Jar
+        working-directory: ./erp_mes
         run: |
-          chmod +x gradlew
+          chmod +x ./gradlew
           ./gradlew clean build -x test
 
-      ### 4. Docker 이미지 빌드
       - name: Build Docker Image
+        working-directory: ./erp_mes
         run: |
           docker build -t myapp .
 
-      ### 5. Docker 이미지를 tar로 저장
       - name: Save Docker Image
         run: |
-          docker save myapp -o myapp.tar
+          docker save myapp > myapp.tar
 
-      ### 6. tar 파일을 EC2로 SCP 전송
       - name: Copy Image to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -46,7 +42,6 @@ jobs:
           source: "myapp.tar"
           target: "~/"
 
-      ### 7. EC2에서 컨테이너 재배포
       - name: Deploy on EC2
         uses: appleboy/ssh-action@v0.1.7
         with:
@@ -54,18 +49,13 @@ jobs:
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            # 기존 컨테이너 중지 및 삭제
             docker stop spring 2>/dev/null || true
             docker rm spring 2>/dev/null || true
 
-            # 새 이미지 로드
-            docker load -i ~/myapp.tar
+            docker load < ~/myapp.tar
 
-            # 컨테이너 실행
-            docker run -d \
-              -p 8080:8080 \
-              --name spring \
-              -e SPRING_DATASOURCE_URL=${{ secrets.DB_URL }} \
+            docker run -d -p 8080:8080 --name spring \
+              -e SPRING_DATASOURCE_URL=jdbc:oracle:thin:@localhost:1521/FREEPDB1 \
               -e SPRING_DATASOURCE_USERNAME=C##TEAM1 \
               -e SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }} \
               myapp
