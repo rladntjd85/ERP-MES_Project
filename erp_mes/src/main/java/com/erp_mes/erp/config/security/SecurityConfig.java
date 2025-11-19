@@ -39,7 +39,8 @@ public class SecurityConfig {
     				.ignoringRequestMatchers("/ws/**") 
     			)
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/main","/bootstrap/**").permitAll()
+//                .requestMatchers("/", "/main","/bootstrap/**").permitAll()
+                .requestMatchers("/", "/bootstrap/**").permitAll()
                 .requestMatchers("/login").permitAll()
                 // 관리자 근태관리 URL 접근 제한
                 .requestMatchers("/attendance/adminCommute/**", "/attendance/adminCommuteLog/**")
