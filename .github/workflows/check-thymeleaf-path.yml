@@ -1,0 +1,22 @@
+name: Check Thymeleaf View Paths
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  check-view-path:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Scan for invalid thymeleaf return paths
+        run: |
+          INVALID=$(grep -R 'return "/' -n src/main/java || true)
+          if [[ ! -z "$INVALID" ]]; then
+              echo "❌ 잘못된 뷰 경로 발견!"
+              echo "$INVALID"
+              exit 1
+          fi
+          echo "✔ 모든 return 경로 OK"
