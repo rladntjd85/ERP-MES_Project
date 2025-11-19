@@ -1,0 +1,64 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      # Java 빌드
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build Spring Boot Jar
+        run: |
+          chmod +x ./gradlew
+          ./gradlew clean build -x test
+
+      # Docker 이미지 빌드
+      - name: Build Docker Image
+        run: |
+          docker build -t myapp .
+
+      # Docker 이미지 tar로 저장
+      - name: Save Docker Image
+        run: |
+          docker save myapp > myapp.tar
+
+      # tar 파일을 EC2로 전송
+      - name: Copy Image to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "myapp.tar"
+          target: "~/"
+
+      # EC2에서 컨테이너 재배포
+      - name: Deploy on EC2
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            docker stop spring 2>/dev/null || true
+            docker rm spring 2>/dev/null || true
+
+            docker load < ~/myapp.tar
+
+            docker run -d -p 8080:8080 --name spring \
+              -e SPRING_DATASOURCE_URL=jdbc:oracle:thin:@localhost:1521/FREEPDB1 \
+              -e SPRING_DATASOURCE_USERNAME=C##TEAM1 \
+              -e SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }} \
+              myapp
