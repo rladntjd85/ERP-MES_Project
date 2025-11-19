@@ -117,7 +117,7 @@ public class PersonnelController {
 			
 		}
 
-		return "/hrn/personnelCurrent";
+		return "hrn/personnelCurrent";
 	}
 	//이미지 요청 리퀘스트 제어 
 	@GetMapping("/showImg/{empId}")
