@@ -117,7 +117,9 @@
 	    JOIN common_dt_code s ON c.work_status = s.com_dt_id
 		JOIN common_dt_code ws ON c.work_status = ws.com_dt_id AND ws.com_id = 'WSTA'
 	    WHERE TRUNC(c.check_in_time) 
-	          BETWEEN #{startDate,jdbcType=DATE} AND #{endDate,jdbcType=DATE}
+            BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') 
+                AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
+
 	    ORDER BY commuteDate desc
 	</select>
 	
