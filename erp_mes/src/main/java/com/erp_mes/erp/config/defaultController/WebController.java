@@ -41,7 +41,7 @@ public class WebController {
 		
 	}
 
-	@RequestMapping("main")
+	@RequestMapping("/main")
 	public String scheduleList(Model model, @AuthenticationPrincipal PersonnelLoginDTO personnelLoginDTO) {
 
 		String empDeptName = null;
