@@ -9,53 +9,50 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. 코드 체크아웃
+      # Checkout
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      # 2. 디버그 (원하면 삭제 가능)
-      - name: Debug list files
+      # Debug
+      - name: Debug Root
         run: |
-          echo "=== ROOT FILES ==="
           ls -al
-          echo "=== erp_mes FILES ==="
           ls -al erp_mes
+          ls -al erp_mes/src/main/resources
 
-      # 3. Java 설치
-      - name: Set up JDK 17
+      # Setup JDK
+      - name: Setup JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      # 4. Gradle 빌드 (erp_mes 폴더 내부 빌드)
-      - name: Build Spring Boot Jar
+      # Build JAR
+      - name: Build JAR
         run: |
           cd erp_mes
           chmod +x gradlew
           ./gradlew clean build -x test
 
-      # 5. Docker 이미지 빌드 경로 수정됨 (중요!)
+      # Docker build
       - name: Build Docker Image
-        run: |
-          docker build -t myapp ./erp_mes
+        run: docker build -t myapp ./erp_mes
 
-      # 6. Docker 이미지 tar로 저장
+      # Save to tar
       - name: Save Docker Image
-        run: |
-          docker save myapp > myapp.tar
+        run: docker save myapp > myapp.tar
 
-      # 7. TAR 파일을 EC2로 복사
-      - name: Copy Image to EC2
+      # Copy to EC2
+      - name: Upload to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           source: "myapp.tar"
-          target: "~/"
+          target: "~"
 
-      # 8. EC2에서 배포
+      # Run on EC2
       - name: Deploy on EC2
         uses: appleboy/ssh-action@v0.1.7
         with:
@@ -68,8 +65,7 @@ jobs:
 
             docker load < ~/myapp.tar
 
-            docker run -d -p 8080:8080 --name spring \
-              -e SPRING_DATASOURCE_URL=jdbc:oracle:thin:@localhost:1521/FREEPDB1 \
-              -e SPRING_DATASOURCE_USERNAME=C##TEAM1 \
-              -e SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            docker run -d --name spring \
+              --network=mynetwork \
+              -p 8080:8080 \
               myapp
