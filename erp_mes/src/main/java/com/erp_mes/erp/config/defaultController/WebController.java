@@ -46,6 +46,10 @@ public class WebController {
 
 		String empDeptName = null;
 		boolean isAdmin = false;
+		
+		if (personnelLoginDTO == null) {
+	        return "redirect:/";  // 로그인 안되어있으면 로그인 페이지로
+	    }
 
 		String empDeptId = personnelLoginDTO.getEmpDeptId();
 		if (commonCodeService != null) {
