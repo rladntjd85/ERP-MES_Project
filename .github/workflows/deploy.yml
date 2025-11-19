@@ -9,93 +9,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout
+      # Checkout
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      # 2. Debug
+      # Debug
       - name: Debug Root
         run: |
-          echo "==== ROOT ===="
           ls -al
-          echo "==== ERP_MES ===="
           ls -al erp_mes
-          echo "==== RESOURCES ===="
-          ls -al erp_mes/src/main/resources || true
+          ls -al erp_mes/src/main/resources
 
-      # 3. Setup Java 17
+      # Setup JDK
       - name: Setup JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      # 4. Create application.properties
-      - name: Create application.properties
-        run: |
-          mkdir -p erp_mes/src/main/resources
-          cat << 'EOF' > erp_mes/src/main/resources/application.properties
-          spring.application.name=erp_mes
-          server.port=8080
-          
-          # Hibernate
-          spring.jpa.hibernate.ddl-auto=validate
-          spring.jpa.database-platform=org.hibernate.dialect.OracleDialect
-          logging.level.org.hibernate.SQL=DEBUG
-          logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
-          spring.jpa.show-sql=true
-          spring.jpa.properties.hibernate.format_sql=true
-          logging.level.org.springframework.security=INFO
-          
-          # DB import
-          spring.config.import=application-db.properties
-          
-          # Multipart
-          spring.servlet.multipart.max-file-size=5MB
-          spring.servlet.multipart.max-request-size=25MB
-          
-          # File Upload
-          file.uploadBaseLocation=/usr/local/tomcat/upload
-          file.itemImgLocation=/personnel/img
-          
-          # API KEY
-          service.key=${{ secrets.SERVICE_KEY }}
-          data.go.kr.api.key=${{ secrets.DATA_GO_KR_API_KEY }}
-          
-          # MyBatis
-          mybatis.mapper-locations=classpath:mapper/*.xml
-          mybatis.configuration.map-underscore-to-camel-case=true
-          mybatis.type-aliases-package=com.erp_mes.erp.approval.dto,com.erp_mes.erp.commonCode,com.erp_mes.erp.groupware.dto,com.erp_mes.erp.personnel.dto,com.erp_mes.mes.business.dto,com.erp_mes.mes.lot.dto,com.erp_mes.mes.plant.dto,com.erp_mes.pm.dto,com.erp_mes.mes.pop.dto,com.erp_mes.mes.purchase.dto,com.erp_mes.mes.quality.dto,com.erp_mes.mes.stock.dto
-          EOF
-
-      # 5. Create application-db.properties
-      - name: Create application-db.properties
-        run: |
-          cat <<EOF > erp_mes/src/main/resources/application-db.properties
-          spring.datasource.url=${{ secrets.DB_URL }}
-          spring.datasource.username=${{ secrets.DB_USERNAME }}
-          spring.datasource.password=${{ secrets.DB_PASSWORD }}
-          spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
-          EOF
-
-      # 6. Build JAR
+      # Build JAR
       - name: Build JAR
         run: |
           cd erp_mes
           chmod +x gradlew
           ./gradlew clean build -x test
 
-      # 7. Build Docker Image
+      # Docker build
       - name: Build Docker Image
-        run: |
-          docker build -t myapp ./erp_mes
+        run: docker build -t myapp ./erp_mes
 
-      # 8. Save image to tar
+      # Save to tar
       - name: Save Docker Image
         run: docker save myapp > myapp.tar
 
-      # 9. Copy tar to EC2
-      - name: Copy to EC2
+      # Copy to EC2
+      - name: Upload to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -104,7 +52,7 @@ jobs:
           source: "myapp.tar"
           target: "~"
 
-      # 10. Deploy on EC2
+      # Run on EC2
       - name: Deploy on EC2
         uses: appleboy/ssh-action@v0.1.7
         with:
