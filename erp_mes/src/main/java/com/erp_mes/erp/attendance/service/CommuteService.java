@@ -53,7 +53,10 @@ public class CommuteService {
 		
 		// 근무 기준시간 조회
 		CommuteScheduleDTO schedule = commuteScheduleMapper.getCurrentSchedule();
-//		log.info("schedule : " + schedule);
+		
+		if (schedule == null || schedule.getWorkStartTime() == null) {
+		    throw new IllegalStateException("근무 스케줄 정보가 존재하지 않습니다.");
+		}
 		
 		// 지각 여부 판별
 		LocalTime startTime = schedule.getWorkStartTime().toLocalTime(); // db에서 가져온 출근시작시간
