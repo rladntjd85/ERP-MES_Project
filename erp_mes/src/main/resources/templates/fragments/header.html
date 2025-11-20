@@ -433,7 +433,7 @@
 							<div
 								class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
 								aria-labelledby="userDropdown">
-								<a class="dropdown-item" href="@{/personnel/detailInfo(empId=${#authentication.principal.empId})}"> <i
+								<a class="dropdown-item" th:href="@{/personnel/detailInfo(empId=${#authentication.principal.empId})}"> <i
 									class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> 마이 프로필
 									조회
 								</a>
