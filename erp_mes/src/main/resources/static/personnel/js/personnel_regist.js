@@ -108,22 +108,53 @@
 
 
 	// 사진 등록 함수
-	function employeePhoto(event) {
-		const file = event.target.files[0]; // 선택된 파일 가져오기
-		const reader = new FileReader(); // FileReader 객체 생성
+    function employeePhoto(event) {
+        const file = event.target.files[0]; // 선택된 파일
+        const imgElement = document.getElementById("pFIle");
 
-		reader.onload = function() {
-			const imgElement = document.getElementById("pFIle");
-			imgElement.src = reader.result; // 미리보기 이미지 변경
-			imgElement.style.width = "100%"; // 부모 요소에 맞게 조정
-			imgElement.style.height = "100%";
-			imgElement.style.objectFit = "cover"; // 비율 유지하면서 꽉 차게
-		}
+        if (!file) return;
 
-		if (file) {
-			reader.readAsDataURL(file); // 파일을 읽어서 미리보기
-		}
-	}
+        // 허용 확장자
+        const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+
+        // 1) 확장자 체크
+        if (!allowedExtensions.includes(fileExtension)) {
+            alert("이미지 파일(jpg, png, gif)만 업로드 가능합니다.");
+            event.target.value = ""; // 입력값 초기화
+            imgElement.src = "";     // 미리보기 제거
+            return;
+        }
+
+        // 2) MIME 타입 체크 (추가 보안)
+        if (!file.type.startsWith("image/")) {
+            alert("유효한 이미지 파일이 아닙니다.");
+            event.target.value = "";
+            imgElement.src = "";
+            return;
+        }
+
+        // 3) 용량 체크 (5MB 제한)
+        const maxSize = 5 * 1024 * 1024; // 5MB
+        if (file.size > maxSize) {
+            alert("이미지 파일 크기는 최대 5MB까지 가능합니다.");
+            event.target.value = "";
+            imgElement.src = "";
+            return;
+        }
+
+        // 4) 미리보기 처리
+        const reader = new FileReader();
+        reader.onload = function () {
+            imgElement.src = reader.result;
+            imgElement.style.width = "100%";
+            imgElement.style.height = "100%";
+            imgElement.style.objectFit = "cover";
+        }
+
+        reader.readAsDataURL(file);
+    }
+
 	
 // 	  '.notice-title'를 클릭하면 '.notice-list'에 .show 클래스를 토글
 	document.querySelector('.notice-title').addEventListener('click', function() {
