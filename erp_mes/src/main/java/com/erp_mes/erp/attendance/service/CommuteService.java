@@ -19,6 +19,7 @@ import com.erp_mes.erp.attendance.mapper.CommuteScheduleMapper;
 import com.erp_mes.erp.commonCode.dto.CommonDetailCodeDTO;
 import com.erp_mes.erp.personnel.dto.PersonnelDTO;
 
+import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -42,6 +43,7 @@ public class CommuteService {
 
 
 	// 출근버튼
+	@Transactional
 	public CommuteDTO checkIn(String empId) {
 		
 		// 오늘 출근 기록이 있는지 확인
