@@ -41,9 +41,13 @@ jobs:
       - name: Build Docker Image
         run: docker build -t myapp ./erp_mes
 
-      # Create network (if not exists)
+      # Create docker network (if not exists)
       - name: Create Docker Network
         run: docker network create mynetwork 2>/dev/null || true
+
+      # Attach oracle-xe container to the network
+      - name: Attach oracle-xe to network
+        run: docker network connect mynetwork oracle-xe 2>/dev/null || true
 
       # Stop old container
       - name: Stop old container
@@ -67,6 +71,6 @@ jobs:
             -e DATA_GO_KR_API_KEY="${{ secrets.DATA_GO_KR_API_KEY }}" \
             myapp
 
-      # Cleanup docker images
+      # Cleanup unused docker images
       - name: Cleanup
         run: docker image prune -f
