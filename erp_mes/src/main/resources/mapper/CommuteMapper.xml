@@ -48,10 +48,6 @@
 	    AND TRUNC(check_in_time) = TRUNC(SYSDATE)
 	</select>
 	
-	<select id="selectSysdate" resultType="java.time.LocalDateTime">
-        SELECT SYSDATE FROM dual
-    </select>
-	
 	
 	<!-- 출근상태 commute_record에 저장 -->
 	<insert id="insertCommuteCheckIn" parameterType="com.erp_mes.erp.attendance.dto.CommuteDTO">

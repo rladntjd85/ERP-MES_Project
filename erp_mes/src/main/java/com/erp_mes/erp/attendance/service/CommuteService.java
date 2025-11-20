@@ -44,12 +44,6 @@ public class CommuteService {
 	// 출근버튼
 	public CommuteDTO checkIn(String empId) {
 		
-		LocalDateTime now2 = LocalDateTime.now();
-		log.info("JAVA now        = {}", now2);
-
-		LocalDateTime dbDate = commuteMapper.selectSysdate();
-		log.info("DB SYSDATE      = {}", dbDate);
-		
 		// 오늘 출근 기록이 있는지 확인
 	    int count = commuteMapper.getTodayCheckInCount(empId);
 //	    log.info("count : " + count);

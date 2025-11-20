@@ -1,6 +1,5 @@
 package com.erp_mes.erp.attendance.mapper;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -58,8 +57,6 @@ public interface CommuteMapper {
 
 	// 삭제된 출근 로그 데이터 가져오기
 	List<CommuteDeleteLogDTO> getLogData();
-
-	LocalDateTime selectSysdate();
 
 
 
