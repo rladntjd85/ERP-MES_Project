@@ -3,6 +3,9 @@ name: Deploy to EC2
 on:
   push:
     branches: [ "main" ]
+    paths-ignore:
+      - "README.md"
+      - "**/README.md"
 
 jobs:
   deploy:
@@ -60,17 +63,13 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            # Create network if not exists
             docker network create mynetwork 2>/dev/null || true
 
-            # Stop previous container
             docker stop spring 2>/dev/null || true
             docker rm spring 2>/dev/null || true
 
-            # Load new image
             docker load < ~/myapp.tar
 
-            # Run
             docker run -d --name spring \
               --network=mynetwork \
               --restart=always \
@@ -82,5 +81,4 @@ jobs:
               -e DATA_GO_KR_API_KEY="${{ secrets.DATA_GO_KR_API_KEY }}" \
               myapp
 
-            # Cleanup old images
             docker image prune -f
