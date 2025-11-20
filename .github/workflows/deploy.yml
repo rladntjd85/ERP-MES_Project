@@ -23,14 +23,14 @@ jobs:
           ls -al erp_mes
           ls -al erp_mes/src/main/resources
 
-      # Setup JDK
-      - name: Setup JDK 17
+      # Setup JDK (프로젝트 요구 버전: 21)
+      - name: Setup JDK 21
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'temurin'
 
-      # Build
+      # Build JAR
       - name: Build JAR
         run: |
           cd erp_mes
@@ -41,46 +41,27 @@ jobs:
       - name: Build Docker Image
         run: docker build -t myapp ./erp_mes
 
-      # Save image
-      - name: Save Docker Image
-        run: docker save myapp > myapp.tar
+      # Stop & Remove old container
+      - name: Stop old container
+        run: |
+          docker stop spring || true
+          docker rm spring || true
 
-      # Upload to EC2
-      - name: Upload to EC2
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
-          source: "myapp.tar"
-          target: "~"
+      # Run new container
+      - name: Run new container
+        run: |
+          docker run -d --name spring \
+            --restart=always \
+            -p 8080:8080 \
+            -v /home/ubuntu/upload:/upload \
+            -v /home/ubuntu/personnel/img:/personnel/img \
+            -e DB_URL="${{ secrets.DB_URL }}" \
+            -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
+            -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
+            -e SERVICE_KEY="${{ secrets.SERVICE_KEY }}" \
+            -e DATA_GO_KR_API_KEY="${{ secrets.DATA_GO_KR_API_KEY }}" \
+            myapp
 
-      # Deploy on EC2
-      - name: Deploy on EC2
-        uses: appleboy/ssh-action@v0.1.7
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            docker network create mynetwork 2>/dev/null || true
-
-            docker stop spring 2>/dev/null || true
-            docker rm spring 2>/dev/null || true
-
-            docker load < ~/myapp.tar
-
-            docker run -d --name spring \
-              --network=mynetwork \
-              --restart=always \
-              -p 8080:8080 \
-              -v /home/ubuntu/upload:/upload \
-              -v /home/ubuntu/personnel/img:/personnel/img \
-              -e DB_URL="${{ secrets.DB_URL }}" \
-              -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
-              -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
-              -e SERVICE_KEY="${{ secrets.SERVICE_KEY }}" \
-              -e DATA_GO_KR_API_KEY="${{ secrets.DATA_GO_KR_API_KEY }}" \
-              myapp
-
-            docker image prune -f
+      # Cleanup docker images
+      - name: Cleanup
+        run: docker image prune -f
