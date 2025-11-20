@@ -6,24 +6,16 @@
 
 	<!-- 출퇴근 기준시간 -->
 	<select id="getCurrentSchedule" resultType="com.erp_mes.erp.attendance.dto.CommuteScheduleDTO">
-		SELECT 
-		    schedule_id,
-		    work_start_time,
-		    work_end_time,
-		    apply_start_date
-		FROM commute_schedule
-		WHERE ROWNUM = 1
-
-<!-- 		SELECT * -->
-<!-- 		FROM ( -->
-<!-- 		    SELECT  -->
-<!-- 		        schedule_id, -->
-<!-- 		        work_start_time, -->
-<!-- 		        work_end_time, -->
-<!-- 		        apply_start_date -->
-<!-- 		    FROM commute_schedule -->
-<!-- 		    ORDER BY apply_start_date DESC -->
-<!-- 		) -->
-<!-- 		WHERE ROWNUM = 1 -->
+		SELECT *
+        FROM (
+            SELECT 
+                schedule_id,
+                work_start_time,
+                work_end_time,
+                apply_start_date
+            FROM commute_schedule
+            ORDER BY apply_start_date DESC
+        )
+        WHERE ROWNUM = 1
 	</select>
 </mapper>
