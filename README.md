@@ -55,8 +55,8 @@ CI/CD 보안 이슈 → 외부 PR workflow 승인 정책 적용, runner 격리
 
 🔗 데모 URL
 
-http://13.125.58.201:8080
+<a href="http://13.125.58.201:8080" target="_blank">데모 사이트</a>
 
-👤 GitHub
+👤 연락처
 
-https://github.com/rladntjd85/ERP-MES_Project
+rladntjd850@gmail.com
