@@ -24,6 +24,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @Service
+@Transactional
 public class CommuteService {
 
 	private final CommuteMapper commuteMapper;
@@ -43,7 +44,7 @@ public class CommuteService {
 
 
 	// 출근버튼
-	@Transactional
+	
 	public CommuteDTO checkIn(String empId) {
 		
 		// 오늘 출근 기록이 있는지 확인
