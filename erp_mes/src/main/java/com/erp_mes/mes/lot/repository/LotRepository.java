@@ -38,27 +38,27 @@ public interface LotRepository extends JpaRepository<LotMaster, String> {
 	List<LotMaster> findByWorkOrderId(Long workOrderId);
 	
 	@Query(value = """
-		    SELECT 
-		        o.lot_id AS lotId,
-		        o.out_count AS outCount,
-		        m.material_name AS materialNm,
-		        m.material_type AS materialType,
-		        m.material_id AS materialId
-		    FROM 
-		        work_order w
-		    JOIN 
-		        product_plan pp
-		        ON w.plan_id = pp.plan_id
-		    JOIN 
-		        output o
-		        ON o.product_plan = pp.plan_id         -- ★ work_order_id 없어도 연결됨
-		    LEFT JOIN 
-		        material m
-		        ON o.product_plan = m.material_id
-		    WHERE 
-		        w.work_order_id = :workOrderId
-		    """, nativeQuery = true)
-		List<LotDetailDTO> findByMaterialInfo(@Param("workOrderId") String workOrderId);
+			SELECT 
+			    o.lot_id AS lotId,
+			    o.out_count AS outCount,
+			    m.material_name AS materialNm,
+			    m.material_type AS materialType,
+			    m.material_id AS materialId
+			FROM 
+			    work_order w
+			JOIN 
+			    product_plan pp
+			        ON w.plan_id = pp.plan_id              -- 생산계획 연결
+			JOIN 
+			    output o
+			        ON o.product_plan = pp.plan_id              -- ★ output = product_plan 기준 연결
+			LEFT JOIN 
+			    material m
+			        ON o.material_id = m.material_id        -- 자재 정보 매칭
+			WHERE 
+			    w.work_order_id = :workOrderId
+			""", nativeQuery = true)
+	List<LotDetailDTO> findByMaterialInfo(@Param("workOrderId") String workOrderId);
 
 	@Query(value = """
 			select 
