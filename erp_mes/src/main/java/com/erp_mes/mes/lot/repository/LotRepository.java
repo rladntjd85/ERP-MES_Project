@@ -51,10 +51,10 @@ public interface LotRepository extends JpaRepository<LotMaster, String> {
 		        ON w.plan_id = pp.plan_id
 		    JOIN 
 		        output o
-		        ON o.plan_id = pp.plan_id         -- ★ work_order_id 없어도 연결됨
+		        ON o.product_plan = pp.plan_id         -- ★ work_order_id 없어도 연결됨
 		    LEFT JOIN 
 		        material m
-		        ON o.material_id = m.material_id
+		        ON o.product_plan = m.material_id
 		    WHERE 
 		        w.work_order_id = :workOrderId
 		    """, nativeQuery = true)
