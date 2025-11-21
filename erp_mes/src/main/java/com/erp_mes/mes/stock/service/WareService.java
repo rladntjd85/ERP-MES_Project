@@ -202,89 +202,86 @@ public class WareService {
     // 입고 검사 완료 처리 (로트 처리)
     @Transactional
     public void completeInput(String inId, String empId) {
+
+        // 1) 입고 정보 조회
         Map<String, Object> input = wareMapper.selectInputById(inId);
-        
-        // 디버깅: input 데이터 확인
-        log.info("=== 입고완료 처리 시작 ===");
-        log.info("inId: {}", inId);
-        log.info("input 데이터: {}", input);
-        
-        if(input == null) {
+
+        if (input == null) {
             throw new RuntimeException("입고 정보를 찾을 수 없습니다.");
         }
-        
+
         String currentStatus = (String) input.get("IN_STATUS");
-        
-        if("입고완료".equals(currentStatus)) {
+        if ("입고완료".equals(currentStatus)) {
             log.info("이미 입고완료 처리된 건입니다: {}", inId);
             return;
         }
-        
-        String materialId = (String) input.get("MATERIAL_ID");
-        String productId = (String) input.get("PRODUCT_ID");
+
+        String materialId  = (String) input.get("MATERIAL_ID");
+        String productId   = (String) input.get("PRODUCT_ID");
         String warehouseId = (String) input.get("WAREHOUSE_ID");
-        String purchaseId = (String) input.get("PURCHASE_ID");
-        Integer inCount = ((Number) input.get("IN_COUNT")).intValue();
-        
-        // 디버깅: 발주 정보 확인
-        log.info("materialId: {}, purchaseId: {}", materialId, purchaseId);
-        
-        String firstLocation = null;
-        String manageId = null;
-        
-        if(materialId != null && purchaseId != null && !purchaseId.isEmpty()) {
-            log.info("=== 발주 연계 입고 상태 업데이트 시작 ===");
-            log.info("purchaseId: {}, materialId: {}", purchaseId, materialId);
-            
+        String purchaseId  = (String) input.get("PURCHASE_ID");
+        Integer inCount    = ((Number) input.get("IN_COUNT")).intValue();
+
+        log.info("=== 입고완료 처리 시작 ===");
+        log.info("materialId: {}, productId: {}, purchaseId: {}", materialId, productId, purchaseId);
+
+
+        // 2) 발주가 있다면 발주 상태 처리
+        if (purchaseId != null && !purchaseId.isEmpty()) {
             try {
-                // 1. 해당 발주-자재의 상세 상태를 COMPLETION으로
-                int updateResult = wareMapper.updatePurchaseDetailStatus(purchaseId, materialId, "COMPLETION");
-                log.info("purchase_detail 업데이트 결과: {} 건", updateResult);
-                
-                // 2. 해당 발주의 모든 상세 조회
-                List<Map<String, Object>> details = wareMapper.selectPurchaseDetails(purchaseId);
-                boolean allComplete = true;
-                
-                for(Map<String, Object> detail : details) {
-                    String detailMaterialId = (String) detail.get("materialId");
-                    String status = (String) detail.get("status");
-                    log.info("발주 상세 체크 - materialId: {}, status: {}", detailMaterialId, status);
-                    
-                    if(!"COMPLETION".equals(status)) {
-                        allComplete = false;
-                    }
-                }
-                
-                // 3. 모든 상세가 완료되면 메인 발주도 COMPLETION
-                if(allComplete) {
+                wareMapper.updatePurchaseDetailStatus(purchaseId, materialId, "COMPLETION");
+
+                List<Map<String, Object>> detailList = wareMapper.selectPurchaseDetails(purchaseId);
+                boolean allDone = detailList.stream()
+                        .allMatch(d -> "COMPLETION".equals(d.get("status")));
+
+                if (allDone) {
                     wareMapper.updatePurchaseStatus(purchaseId, "COMPLETION");
-                    log.info("발주 {} 전체 완료 처리", purchaseId);
-                } else {
-                    log.info("발주 {} 아직 미완료 항목 있음", purchaseId);
                 }
-                
-            } catch(Exception e) {
-                log.error("발주 상태 업데이트 실패", e);
-                // 발주 처리 실패해도 입고는 계속 진행
+
+            } catch (Exception e) {
+                log.error("발주 연계 처리 중 오류 발생 (입고는 계속 진행)", e);
             }
-            firstLocation = distributeToWarehouseItemsForMaterial(
-                    warehouseId, materialId, inCount, empId
-            );
-        } else if(productId != null) {
-            // 완제품인 경우 - 발주 처리 안 함
-            log.info("완제품 입고 - 발주 처리 스킵 (productId: {})", productId);
         }
-        
-        // 기존 마지막 처리
+
+
+        // 3) 로케이션 자동 배정 (자재/완제품 공통)
+        String firstLocation = null;
+
+        if (warehouseId != null) {
+
+            // 자재 입고
+            if (materialId != null) {
+                firstLocation = distributeToWarehouseItemsForMaterial(
+                        warehouseId, materialId, inCount, empId
+                );
+            }
+            // 완제품 입고
+            else if (productId != null) {
+                firstLocation = distributeToWarehouseForProductSimple(
+                        warehouseId, productId, inCount, empId
+                );
+            }
+        }
+
+        log.info("배정된 로케이션: {}", firstLocation);
+
+
+        // 4) 입고 상태 / 위치 업데이트
         wareMapper.updateInputStatus(inId, "입고완료");
-        wareMapper.updateInputLocation(inId, firstLocation);
-        
-        if(manageId != null) {
-            wareMapper.updateInputManageId(inId, manageId);
+
+        if (firstLocation != null) {
+            wareMapper.updateInputLocation(inId, firstLocation);
         }
-        
+
         log.info("=== 입고 완료 처리 종료 ===");
     }
+    
+    private String distributeToWarehouseForProductSimple(String warehouseId, String productId, Integer count, String empId) {
+        // 실제 로직 없으면 기본 위치만 반환해도 됨
+        return "DEFAULT";
+    }
+
     
     // 새로 추가: 발주 관련 메서드만
     @Transactional(readOnly = true)

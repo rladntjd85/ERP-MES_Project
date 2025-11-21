@@ -518,11 +518,12 @@
 	
 	<!-- 입고 위치 업데이트 -->
     <update id="updateInputLocation">
-	    UPDATE input 
-	    SET location_id = #{locationId},
-	        update_date = SYSDATE
-	    WHERE in_id = #{inId}
-	</update>
+        UPDATE input 
+        SET location_id = #{locationId, jdbcType=VARCHAR},
+            update_date = SYSDATE
+        WHERE in_id = #{inId, jdbcType=VARCHAR}
+    </update>
+
 	
 	<!-- item_location 테이블에 새 위치 추가 -->
 	<insert id="insertItemLocation" parameterType="map">
