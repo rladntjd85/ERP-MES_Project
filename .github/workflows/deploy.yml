@@ -12,16 +12,9 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      # Checkout
+      # Checkout code
       - name: Checkout repo
         uses: actions/checkout@v3
-
-      # Debug
-      - name: Debug Root
-        run: |
-          ls -al
-          ls -al erp_mes
-          ls -al erp_mes/src/main/resources
 
       # Setup JDK 21
       - name: Setup JDK 21
@@ -30,47 +23,38 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      # Build JAR
+      # Build Spring Boot JAR
       - name: Build JAR
         run: |
           cd erp_mes
           chmod +x gradlew
           ./gradlew clean build -x test
 
-      # Docker build
+      # Build Docker image for Spring app
       - name: Build Docker Image
         run: docker build -t myapp ./erp_mes
 
-      # Create docker network (if not exists)
-      - name: Create Docker Network
+      # Ensure docker network exists
+      - name: Create docker network
         run: docker network create mynetwork 2>/dev/null || true
 
-      # Attach oracle-xe container to the network
-      - name: Attach oracle-xe to network
-        run: docker network connect mynetwork oracle-xe 2>/dev/null || true
-
-      # Stop old container
-      - name: Stop old container
+      # Copy docker-compose + nginx.conf to server
+      - name: Copy compose files
         run: |
-          docker stop spring || true
-          docker rm spring || true
+          cp docker-compose.yml /home/ubuntu/compose/docker-compose.yml
+          cp nginx.conf /home/ubuntu/compose/nginx.conf
 
-      # Run new container
-      - name: Run new container
+      # Deploy using docker-compose
+      - name: Deploy Containers
         run: |
-          docker run -d --name spring \
-            --network=mynetwork \
-            --restart=always \
-            -p 8080:8080 \
-            -v /home/ubuntu/upload:/upload \
-            -v /home/ubuntu/personnel/img:/personnel/img \
-            -e DB_URL="${{ secrets.DB_URL }}" \
-            -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
-            -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
-            -e SERVICE_KEY="${{ secrets.SERVICE_KEY }}" \
-            -e DATA_GO_KR_API_KEY="${{ secrets.DATA_GO_KR_API_KEY }}" \
-            myapp
+          cd /home/ubuntu/compose
+          DB_URL="${{ secrets.DB_URL }}" \
+          DB_USERNAME="${{ secrets.DB_USERNAME }}" \
+          DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
+          SERVICE_KEY="${{ secrets.SERVICE_KEY }}" \
+          DATA_GO_KR_API_KEY="${{ secrets.DATA_GO_KR_API_KEY }}" \
+          docker compose up -d --build --force-recreate
 
-      # Cleanup unused docker images
+      # Cleanup unused images
       - name: Cleanup
         run: docker image prune -f
