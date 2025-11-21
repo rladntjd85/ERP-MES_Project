@@ -10,11 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.erp_mes.erp.config.util.SessionUtil;
 import com.erp_mes.mes.lot.constant.LotDomain;
@@ -39,32 +37,6 @@ public class LotController {
 	
 	private final LotRepository lotRepository;
 
-	@GetMapping("/test/{wordOrderId}")
-	@ResponseBody
-	@TrackLot(tableName = "work_result", pkColumnName = "work_order_id")
-	public String testLotTrack(@PathVariable("wordOrderId") String workOrderId) {
-		
-		HttpSession session = SessionUtil.getSession();
-        session.setAttribute("targetIdValue", workOrderId); //pk_id의 값 입력
-		return "ok";
-	}
-	
-	@GetMapping("/domaintest")
-	@ResponseBody
-	public String domainTest() {
-		String lotId = null;
-		
-		String domain = "output";
-		LotDomain lotDomain = LotDomain.fromDomain(domain.toLowerCase().trim());
-        String prefix = lotDomain.getPrefix();
-        
-        String datePart = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        String lastLotId = lotRepository.findByLastLotId(prefix, datePart, null);
-        lotId = lotService.generateLotId(prefix, datePart, null, lastLotId);
-        
-		return "ok";
-	}
-	
 	//로트 추적 리스트
 	@GetMapping("")
 	public String showLotTrackingList(@RequestParam(value = "page", defaultValue = "0") int page, 
