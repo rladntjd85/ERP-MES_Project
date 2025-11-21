@@ -1225,6 +1225,7 @@
 	        pp.plan_status as "status"
 	    FROM product_plan pp
 	    LEFT JOIN product p ON pp.product_id = p.product_id
+	    WHERE pp.plan_status = 'POSSIBLE'
 	    ORDER BY pp.due_date, pp.plan_id
 	</select>
 	
