@@ -38,6 +38,11 @@ jobs:
           cp docker-compose.yml /home/ubuntu/compose/docker-compose.yml
           cp nginx.conf /home/ubuntu/compose/nginx.conf
 
+      - name: Stop and remove old containers
+        run: |
+          docker rm -f spring 2>/dev/null || true
+          docker rm -f nginx 2>/dev/null || true
+
       - name: Deploy using docker-compose
         run: |
           cd /home/ubuntu/compose
