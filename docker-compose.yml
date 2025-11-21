@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  spring:
+    image: myapp
+    container_name: spring
+    restart: always
+    networks:
+      - mynetwork
+    ports:
+      - "8080:8080"
+    volumes:
+      - /home/ubuntu/upload:/upload
+      - /home/ubuntu/personnel/img:/personnel/img
+    environment:
+      DB_URL: ${DB_URL}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      SERVICE_KEY: ${SERVICE_KEY}
+      DATA_GO_KR_API_KEY: ${DATA_GO_KR_API_KEY}
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: always
+    networks:
+      - mynetwork
+    depends_on:
+      - spring
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - /etc/letsencrypt:/etc/letsencrypt  # SSL 사용 시
+      - /var/lib/letsencrypt:/var/lib/letsencrypt
+
+networks:
+  mynetwork:
+    external: true
