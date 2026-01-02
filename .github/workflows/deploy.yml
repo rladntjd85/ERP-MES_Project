@@ -43,15 +43,21 @@ jobs:
           docker rm -f spring 2>/dev/null || true
           docker rm -f nginx 2>/dev/null || true
 
+      - name: Create env file
+        run: |
+          cat <<EOF > /home/ubuntu/compose/.env
+          DB_URL=${{ secrets.DB_URL }}
+          DB_USERNAME=${{ secrets.DB_USERNAME }}
+          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+          SERVICE_KEY=${{ secrets.SERVICE_KEY }}
+          DATA_GO_KR_API_KEY=${{ secrets.DATA_GO_KR_API_KEY }}
+          SPRING_PROFILES_ACTIVE=prod
+          EOF
+
       - name: Deploy using docker-compose
         run: |
           cd /home/ubuntu/compose
-          DB_URL="${{ secrets.DB_URL }}" \
-          DB_USERNAME="${{ secrets.DB_USERNAME }}" \
-          DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
-          SERVICE_KEY="${{ secrets.SERVICE_KEY }}" \
-          DATA_GO_KR_API_KEY="${{ secrets.DATA_GO_KR_API_KEY }}" \
-          docker compose up -d --build --force-recreate
+          docker compose --env-file .env up -d --build --force-recreate          
 
       - name: Cleanup unused images
         run: docker image prune -f
