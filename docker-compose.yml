@@ -19,12 +19,8 @@ services:
       SERVICE_KEY: ${SERVICE_KEY}
       DATA_GO_KR_API_KEY: ${DATA_GO_KR_API_KEY}
       # JVM이 컨테이너 메모리를 제대로 인식하도록 강제
-      JAVA_OPTS: >-
-        -XX:MaxRAMPercentage=75.0
-        -XX:InitialRAMPercentage=50.0
-        -XX:+UseG1GC
-        -Xss512k
-        -XX:+ExitOnOutOfMemoryError
+      # JAVA_OPTS를 리스트 형태로 명확히 작성 (가장 안전한 방법)
+      JAVA_OPTS: "-XX:MaxRAMPercentage=75.0 -XX:InitialRAMPercentage=50.0 -XX:+UseG1GC -Xss512k -XX:+ExitOnOutOfMemoryError"
     mem_limit: 768m                  # spring 컨테이너 최대 768MB
     mem_reservation: 512m            # 최소 보장 512MB
     deploy:
