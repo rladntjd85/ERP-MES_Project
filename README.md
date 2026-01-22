@@ -12,7 +12,7 @@
 
 ---
 
-## 🚀 프로젝트 개요
+## 프로젝트 개요
 제조 현장의 문서·결재·공정·생산·재고 관리를 통합 제공하기 위해  
 Spring Boot 기반으로 개발된 ERP · MES 통합 웹 시스템입니다.
 
@@ -23,15 +23,15 @@ AWS 기반 실서비스 환경으로 운영 중입니다.
 ---
 
 ## 🔗 Links
-- **🌐 서비스 URL:** https://rladntjd85.site  
-- **📦 GitHub Repo:** https://github.com/rladntjd85/ERP-MES_Project  
-- **📄 발표(PPT):** https://docs.google.com/presentation/d/1qDlwXMYiBPprzpUOIGZ-u-aldkS5UgSG/edit  
-- **📊 요구사항·테이블 설계:**  
+- ** 서비스 URL:** https://rladntjd85.site  
+- ** GitHub Repo:** https://github.com/rladntjd85/ERP-MES_Project  
+- ** 발표(PPT):** https://docs.google.com/presentation/d/1qDlwXMYiBPprzpUOIGZ-u-aldkS5UgSG/edit  
+- ** 요구사항·테이블 설계:**  
   https://docs.google.com/spreadsheets/d/1Yc7EdMWPktm3QDcTg-RSB7pWTYimPJ7k/edit  
 
 ---
 
-# 🧑‍💻 기여 요약
+# 기여 요약
 
 본 프로젝트의 핵심 모듈 중  
 ✔ **전자결재**  
@@ -46,18 +46,18 @@ AWS 기반 실서비스 환경으로 운영 중입니다.
 
 # ① 팀 프로젝트 당시 개인 기여 (정확 기여 기반)
 
-## 🟦 전자결재 시스템 (개발 30% / 설계·DB 100%)
-👉 **개발한 부분:**
+##  전자결재 시스템 (개발 30% / 설계·DB 100%)
+  **개발한 부분:**
 - **결재 상신(제출) 기능 개발**
 
-👉 **설계/DB 설계를 직접 수행한 부분:**
+  **설계/DB 설계를 직접 수행한 부분:**
 - 전자결재 전체 플로우 설계  
   (작성 → 결재중 → 반려/승인 흐름 구조 설계)  
 - 결재 라우팅 구조(결재선, 실행 순서) 도식화  
 - 결재 테이블·이력 테이블 등 DB 전체 구조 설계  
 - 결재 권한 관리 모델 설계  
 
-👉 **참여/지원한 부분:**
+  **참여/지원한 부분:**
 - 승인/반려 처리 로직 설계 참여  
 - 알림/이력 로직은 구조 설계만 기여  
 
@@ -65,12 +65,12 @@ AWS 기반 실서비스 환경으로 운영 중입니다.
 
 ---
 
-## 🟩 공통문서 관리 시스템 (100% 개인 개발)
+##  공통문서 관리 시스템 (개인 개발)
 - 문서 (CRUD) 기능 개발  
 - Docker 파일 경로 문제 해결(컨테이너 경로 매핑)  
 ---
 
-## 🟧 LOT(생산이력) 시스템 (100% 개인 개발)
+##  LOT(생산이력) 시스템 (개인 개발)
 - 공정별 LOT 자동 생성 로직 개발  
 - 생산지시 → 공정 → 생산결과 흐름 구현  
 - LOT 기반 이력 조회(Tracking) 기능 개발  
@@ -78,7 +78,7 @@ AWS 기반 실서비스 환경으로 운영 중입니다.
 
 ---
 
-## 🟪 초기 화면 설계 (UI 템플릿 → Thymeleaf 적용)
+##  초기 화면 설계 (UI 템플릿 → Thymeleaf 적용)
 - Bootstrap 템플릿 기반으로 **초기 UI 구조 전체 설계**  
 - 레이아웃 구조(Header/Sidebar/Content) 직접 구성  
 - Thymeleaf 구조로 SSR 화면 템플릿 변환  
@@ -88,7 +88,7 @@ AWS 기반 실서비스 환경으로 운영 중입니다.
 
 # ② 프로젝트 종료 후 개인 고도화 & DevOps 구축
 
-## 🔥 백엔드 개선
+##  백엔드 개선
 - MyBatis + JPA 혼용 구조 안정화  
 - 복잡 SQL 정리
 - 불필요 조회 제거 및 성능 개선  
@@ -97,7 +97,7 @@ AWS 기반 실서비스 환경으로 운영 중입니다.
 
 ---
 
-## 🔥 인프라 및 DevOps (100% 개인 구축)
+##  인프라 및 DevOps (100% 개인 구축)
 
 ### Docker 기반 인프라
 - Spring Boot / Oracle XE / Nginx 컨테이너 구성  
@@ -130,14 +130,14 @@ AWS 기반 실서비스 환경으로 운영 중입니다.
 
 ---
 
-# 🧩 주요 기능 요약
+#  주요 기능 요약
 
-## 🟦 ERP
+##  ERP
 - 전자결재(설계·DB 100% / 상신 기능 직접 개발)  
 - 공통문서 관리
 - 사내문서 Approval Flow 구조 설계  
 
-## 🟩 MES
+##  MES
 - LOT 기반 생산이력 관리 (100%)  
 - 공정별 이력/결과 관리  
 
@@ -165,7 +165,7 @@ jQuery · Bootstrap · Toast UI
 
 ---
 
-# ⚙ 인프라 구조
+#  인프라 구조
 ```
 Client
   ↓ (TLS 1.3)
@@ -180,5 +180,5 @@ Oracle XE (Docker)
 
 ---
 
-## 📞 Contact  
-📧 rladntjd850@gmail.com
+##  Contact  
+rladntjd850@gmail.com
