@@ -24,7 +24,6 @@ AWS 기반 실서비스 환경으로 운영 중입니다.
 
 ## 🔗 Links
 - ** 서비스 URL:** https://rladntjd85.site  
-- ** GitHub Repo:** https://github.com/rladntjd85/ERP-MES_Project  
 - ** 발표(PPT):** https://docs.google.com/presentation/d/1qDlwXMYiBPprzpUOIGZ-u-aldkS5UgSG/edit  
 - ** 요구사항·테이블 설계:**  
   https://docs.google.com/spreadsheets/d/1Yc7EdMWPktm3QDcTg-RSB7pWTYimPJ7k/edit  
