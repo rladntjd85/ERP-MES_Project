@@ -22,7 +22,7 @@ AWS 기반 실서비스 환경으로 운영 중입니다.
 
 ---
 
-## 🔗 Links
+## Links
 - ** 서비스 URL:** https://rladntjd85.site  
 - ** 발표(PPT):** https://docs.google.com/presentation/d/1qDlwXMYiBPprzpUOIGZ-u-aldkS5UgSG/edit  
 - ** 요구사항·테이블 설계:**  
@@ -120,7 +120,7 @@ AWS 기반 실서비스 환경으로 운영 중입니다.
 
 ---
 
-# 📊 주요 성과
+# 주요 성과
 - **배포 자동화 구축 → 배포 시간 약 70% 감소**  
 - Docker 기반 Oracle–Spring 연동 안정화  
 - LOT 기반 생산이력 전체 흐름 구현  
@@ -129,20 +129,7 @@ AWS 기반 실서비스 환경으로 운영 중입니다.
 
 ---
 
-#  주요 기능 요약
-
-##  ERP
-- 전자결재(설계·DB / 상신 기능 직접 개발)  
-- 공통문서 관리
-- 사내문서 Approval Flow 구조 설계  
-
-##  MES
-- LOT 기반 생산이력 관리 (직접 개발)  
-- 공정별 이력/결과 관리  
-
----
-
-# 🛠 기술 스택
+# 기술 스택
 
 ### Backend  
 Java 21 · Spring Boot 3 · Spring Security  
