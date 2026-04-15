@@ -26,7 +26,6 @@
 
 <h2>Links</h2>
 <ul>
-  <li><b>서비스:</b> <a href="https://rladntjd85.site" target="_blank" rel="noopener noreferrer">https://rladntjd85.site</a></li>
   <li><b>발표자료(PPT):</b> <a href="https://docs.google.com/presentation/d/1qDlwXMYiBPprzpUOIGZ-u-aldkS5UgSG/edit" target="_blank" rel="noopener noreferrer">Google Slides</a></li>
   <li><b>요구사항·테이블 설계:</b> <a href="https://docs.google.com/spreadsheets/d/1Yc7EdMWPktm3QDcTg-RSB7pWTYimPJ7k/edit" target="_blank" rel="noopener noreferrer">Google Sheets</a></li>
 </ul>
